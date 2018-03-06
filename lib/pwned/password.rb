@@ -19,14 +19,17 @@ module Pwned
       @request_options = DEFAULT_REQUEST_OPTIONS.merge(request_options)
     end
 
+    # Returns the full SHA1 hash of the given password.
     def hashed_password
       @hashed_password ||= Digest::SHA1.hexdigest(password).upcase
     end
 
+    # Returns true when the password has been pwned.
     def pwned?
       pwned_count > 0
     end
 
+    # Returns number of times the password has been pwned.
     def pwned_count
       regex = /^#{Regexp.escape hashed_password[HASH_PREFIX_LENGTH..-1]}:(\d+)$/
       @pwned_count ||= hashes[regex, 1].to_i
