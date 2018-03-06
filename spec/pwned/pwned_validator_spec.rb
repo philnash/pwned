@@ -1,6 +1,4 @@
 RSpec.describe PwnedValidator do
-  let(:file_5BAA6) { File.new('./spec/fixtures/5BAA6.txt') }
-
   class Model
     include ActiveModel::Validations
 
@@ -9,6 +7,7 @@ RSpec.describe PwnedValidator do
 
   describe "when pwned" do
     before(:example) do
+      file_5BAA6 = File.new('./spec/fixtures/5BAA6.txt')
       @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_return(body: file_5BAA6)
     end
 
@@ -35,6 +34,24 @@ RSpec.describe PwnedValidator do
       expect(model).to_not be_valid
       expect(model.errors[:password].size).to eq(1)
       expect(model.errors[:password].first).to eq('has been pwned 3303003 times')
+    end
+  end
+
+  describe "when not pwned" do
+    before(:example) do
+      file_37D5B = File.new('./spec/fixtures/37D5B.txt')
+      @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/37D5B").to_return(body: file_37D5B)
+    end
+
+    it "reports the model as valid" do
+      class ModelWithValidation < Model
+        validates :password, pwned: true
+      end
+
+      model = ModelWithValidation.new
+      model.password = "t3hb3stpa55w0rd"
+
+      expect(model).to be_valid
     end
   end
 end
