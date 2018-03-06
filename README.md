@@ -106,6 +106,11 @@ class User < ApplicationRecord
   # We will raise an error on network errors. This means that `record.valid?` will raise `Pwned::Error`.
   # Not recommended to use in production.
   validates :password, pwned: { on_error: :raise_error }
+  # Call custom proc on error. For example, capture errors in Sentry,
+  # but do not mark the record as invalid.
+  validates :password, pwned: {
+    on_error: ->(record, error) { Raven.capture_exception(error) },
+  }
 end
 ```
 

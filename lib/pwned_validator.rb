@@ -10,12 +10,14 @@ class PwnedValidator < ActiveModel::EachValidator
       if pwned_check.pwned?
         record.errors.add(attribute, :pwned, options.merge(count: pwned_check.pwned_count))
       end
-    rescue Pwned::Error
+    rescue Pwned::Error => error
       case on_error
       when :invalid
         record.errors.add(attribute, :pwned_error, options.merge(message: options[:error_message]))
       when :valid
         # Do nothing, consider the record valid
+      when Proc
+        on_error.call(record, error)
       else
         raise
       end

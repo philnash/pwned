@@ -125,5 +125,16 @@ RSpec.describe PwnedValidator do
 
       expect(model).to be_valid
     end
+
+    it "calls a proc configured for error handling" do
+      class ModelWithValidationProcOnError < Model
+        validates :password, pwned: { on_error: ->(record, error) { raise RuntimeError, "custom proc" } }
+      end
+
+      model = ModelWithValidationProcOnError.new
+      model.password = "password"
+
+      expect { model.valid? }.to raise_error(RuntimeError, "custom proc")
+    end
   end
 end
