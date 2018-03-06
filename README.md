@@ -4,6 +4,8 @@ Troy Hunt's [Pwned Passwords API V2](https://haveibeenpwned.com/API/v2#PwnedPass
 
 `Pwned` is a Ruby library to use the Pwned Passwords API's [k-Anonymity model](https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/#cloudflareprivacyandkanonymity) to test a password against the API without sending the entire password to the service.
 
+The data from this API is provided by [Have I been pwned?](https://haveibeenpwned.com/). Before using the API, please check [the acceptable uses and license of the API](https://haveibeenpwned.com/API/v2#AcceptableUse).
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -47,6 +49,14 @@ begin
 rescue Pwned::Error => e
   # Ummm... don't worry about it, I guess?
 end
+```
+
+### Advanced
+
+You can set options and headers to be used with `open-uri` when making the request to the API. HTTP headers must be string keys and the [other options are available in the `OpenURI::OpenRead` module](https://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open).
+
+```ruby
+password = Pwned::Password.new("password", { 'User-Agent' => 'Super fun new user agent' })
 ```
 
 ## TODO

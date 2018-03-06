@@ -82,4 +82,28 @@ RSpec.describe Pwned::Password do
       expect(@stub).to have_been_requested.times(2)
     end
   end
+
+  describe "advanced requests" do
+    before(:example) do
+      file = File.new('./spec/fixtures/5BAA6.txt')
+      stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_return(body: file)
+    end
+
+    it "sends a user agent with the current version" do
+      password.pwned?
+
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
+        with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })).
+        to have_been_made.once
+    end
+
+    it "allows the user agent to be set" do
+      password = Pwned::Password.new("password", { "User-Agent" => "Super fun user agent" })
+      password.pwned?
+
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
+        with(headers: { "User-Agent" => "Super fun user agent" })).
+        to have_been_made.once
+    end
+  end
 end

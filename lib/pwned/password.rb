@@ -5,11 +5,15 @@ module Pwned
   class Password
     API_URL = "https://api.pwnedpasswords.com/range/"
     HASH_PREFIX_LENGTH = 5
+    DEFAULT_REQUEST_OPTIONS = {
+      "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}"
+    }
 
     attr_reader :password
 
-    def initialize(password)
+    def initialize(password, request_options={})
       @password = password
+      @request_options = DEFAULT_REQUEST_OPTIONS.merge(request_options)
     end
 
     def hashed_password
@@ -32,7 +36,7 @@ module Pwned
 
     def get_hashes
       begin
-        open("#{API_URL}#{hashed_password[0..(HASH_PREFIX_LENGTH-1)]}") do |io|
+        open("#{API_URL}#{hashed_password[0..(HASH_PREFIX_LENGTH-1)]}", @request_options) do |io|
           @hashes = io.read
         end
         @hashes
