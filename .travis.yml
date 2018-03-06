@@ -1,12 +1,21 @@
 sudo: false
 language: ruby
+
+env:
+  matrix:
+    - RAILS_VERSION=4.2.0
+    - RAILS_VERSION=5.0.0
+    - RAILS_VERSION=5.1.0
+
 rvm:
   - 2.5.0
   - 2.4.0
   - 2.3.0
   - jruby
   - ruby-head
+
 before_install: gem install bundler -v 1.16.1
+
 matrix:
   allow_failures:
     - rvm: ruby-head

@@ -1,0 +1,4 @@
+en:
+  errors:
+    messages:
+      pwned: has previously appeared in a data breach and should not be used

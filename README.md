@@ -65,9 +65,29 @@ You can set options and headers to be used with `open-uri` when making the reque
 password = Pwned::Password.new("password", { 'User-Agent' => 'Super fun new user agent' })
 ```
 
+### ActiveRecord Validator
+
+There is a custom validator available for your ActiveRecord models:
+
+```ruby
+class User < ApplicationRecord
+  validates :password, pwned: true
+  # or
+  validates :password, pwned: { message: "has been pwned %{count} times" }
+end
+```
+
+You can change the error message using I18n (use `%{count}` to interpolate the number of times the password was seen in the data breaches):
+
+```yaml
+en:
+  errors:
+    messages:
+      pwned: has been pwned %{count} times
+```
+
 ## TODO
 
-- [ ] Rails validator
 - [ ] Devise plugin
 
 ## Development
