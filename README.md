@@ -98,18 +98,23 @@ class User < ApplicationRecord
   # The record is marked as valid on network errors.
   validates :password, pwned: true
   validates :password, pwned: { on_error: :valid }
+
   # The record is marked as invalid on network errors
   # (error message "could not be verified against the past data breaches".)
   validates :password, pwned: { on_error: :invalid }
+
   # The record is marked as invalid on network errors with custom error.
   validates :password, pwned: { on_error: :invalid, error_message: "might be pwned" }
-  # We will raise an error on network errors. This means that `record.valid?` will raise `Pwned::Error`.
+
+  # We will raise an error on network errors.
+  # This means that `record.valid?` will raise `Pwned::Error`.
   # Not recommended to use in production.
   validates :password, pwned: { on_error: :raise_error }
+
   # Call custom proc on error. For example, capture errors in Sentry,
   # but do not mark the record as invalid.
   validates :password, pwned: {
-    on_error: ->(record, error) { Raven.capture_exception(error) },
+    on_error: ->(record, error) { Raven.capture_exception(error) }
   }
 end
 ```
