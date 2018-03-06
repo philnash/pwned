@@ -49,8 +49,8 @@ module Pwned
     end
 
     def match_data
-      @match_data ||= hashes.match(/#{hashed_password[HASH_PREFIX_LENGTH..-1]}:(\d+)/)
+      return @match_data if defined?(@match_data)
+      @match_data = hashes.match(/#{hashed_password[HASH_PREFIX_LENGTH..-1]}:(\d+)/)
     end
-
   end
 end
