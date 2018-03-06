@@ -37,6 +37,12 @@ RSpec.describe Pwned::Password do
       expect(password.pwned_count).to eq(3303003)
       expect(@stub).to have_been_requested
     end
+
+    it "hashes password once" do
+      expect(Digest::SHA1).to receive(:hexdigest).once.and_call_original
+      expect(password.pwned?).to be true
+      expect(@stub).to have_been_requested
+    end
   end
 
   describe "when not pwned" do

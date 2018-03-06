@@ -18,7 +18,7 @@ module Pwned
     end
 
     def hashed_password
-      Digest::SHA1.hexdigest(password).upcase
+      @hashed_password ||= Digest::SHA1.hexdigest(password).upcase
     end
 
     def pwned?
