@@ -2,6 +2,10 @@ require "bundler/setup"
 require "webmock/rspec"
 require "pwned"
 
+# Easily stub pwned password hash range API requests
+require_relative "support/stub_pwned_range"
+
+# No network requests in specs
 WebMock.disable_net_connect!
 
 RSpec.configure do |config|

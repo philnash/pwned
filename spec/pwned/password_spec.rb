@@ -1,7 +1,5 @@
 RSpec.describe Pwned::Password do
   let(:password) { Pwned::Password.new("password") }
-  let(:file_5BAA6) { File.new('./spec/fixtures/5BAA6.txt') }
-  let(:file_37D5B) { File.new('./spec/fixtures/37D5B.txt') }
 
   it "initializes with a password" do
     expect(password.password).to eq("password")
@@ -23,11 +21,7 @@ RSpec.describe Pwned::Password do
     expect(password.hashed_password).to eq("5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8")
   end
 
-  describe "when pwned" do
-    before(:example) do
-      @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_return(body: file_5BAA6)
-    end
-
+  describe "when pwned", pwned_range: "5BAA6" do
     it "reports it is pwned" do
       expect(password.pwned?).to be true
       expect(@stub).to have_been_requested
@@ -45,13 +39,8 @@ RSpec.describe Pwned::Password do
     end
   end
 
-  describe "when not pwned" do
+  describe "when not pwned", pwned_range: "37D5B" do
     let(:password) { Pwned::Password.new("t3hb3stpa55w0rd") }
-
-    before(:example) do
-      file = File.new('./spec/fixtures/37D5B.txt')
-      @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/37D5B").to_return(body: file_37D5B)
-    end
 
     it "reports it is not pwned" do
       expect(password.pwned?).to be false
@@ -125,11 +114,7 @@ RSpec.describe Pwned::Password do
     end
   end
 
-  describe "advanced requests" do
-    before(:example) do
-      stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_return(body: file_5BAA6)
-    end
-
+  describe "advanced requests", pwned_range: "5BAA6" do
     it "sends a user agent with the current version" do
       password.pwned?
 

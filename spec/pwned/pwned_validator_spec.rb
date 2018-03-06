@@ -5,12 +5,7 @@ RSpec.describe PwnedValidator do
     attr_accessor :password
   end
 
-  describe "when pwned" do
-    before(:example) do
-      file_5BAA6 = File.new('./spec/fixtures/5BAA6.txt')
-      @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_return(body: file_5BAA6)
-    end
-
+  describe "when pwned", pwned_range: "5BAA6" do
     it "marks the model as invalid" do
       class ModelWithValidation < Model
         validates :password, pwned: true
@@ -37,12 +32,7 @@ RSpec.describe PwnedValidator do
     end
   end
 
-  describe "when not pwned" do
-    before(:example) do
-      file_37D5B = File.new('./spec/fixtures/37D5B.txt')
-      @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/37D5B").to_return(body: file_37D5B)
-    end
-
+  describe "when not pwned", pwned_range: "37D5B" do
     it "reports the model as valid" do
       class ModelWithValidation < Model
         validates :password, pwned: true
