@@ -30,6 +30,23 @@ RSpec.describe PwnedValidator do
       expect(model.errors[:password].size).to eq(1)
       expect(model.errors[:password].first).to eq('has been pwned 3303003 times')
     end
+
+    it "allows the user agent to be set" do
+      class ModelWithValidationRequestOptions < Model
+        validates :password, pwned: {
+          request_options: { "User-Agent" => "Super fun user agent" }
+        }
+      end
+
+      model = ModelWithValidationRequestOptions.new
+      model.password = "password"
+
+      expect(model).to_not be_valid
+
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
+        with(headers: { "User-Agent" => "Super fun user agent" })).
+        to have_been_made.once
+    end
   end
 
   describe "when not pwned", pwned_range: "37D5B" do

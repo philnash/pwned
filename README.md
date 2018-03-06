@@ -57,7 +57,7 @@ rescue Pwned::Error => e
 end
 ```
 
-### Advanced
+#### Advanced
 
 You can set options and headers to be used with `open-uri` when making the request to the API. HTTP headers must be string keys and the [other options are available in the `OpenURI::OpenRead` module](https://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open).
 
@@ -77,6 +77,8 @@ class User < ApplicationRecord
 end
 ```
 
+#### I18n
+
 You can change the error message using I18n (use `%{count}` to interpolate the number of times the password was seen in the data breaches):
 
 ```yaml
@@ -86,6 +88,8 @@ en:
       pwned: has been pwned %{count} times
       pwned_error: might be pwned
 ```
+
+#### Network Errors Handling
 
 By default the record will be treated as valid when we cannot reach [haveibeenpwned.com](https://haveibeenpwned.com/) servers. This could be changed via validator parameters:
 
@@ -103,6 +107,16 @@ class User < ApplicationRecord
   # Not recommended to use in production.
   validates :password, pwned: { on_error: :raise_error }
 end
+```
+
+#### Custom Request Options
+
+You can configure network requests made from the validator using `:request_options` (see [OpenURI::OpenRead#open](http://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open) for the list of available options, string keys represent custom network request headers, e.g. `"User-Agent"`):
+
+```ruby
+  validates :password, pwned: {
+    request_options: { read_timeout: 5, open_timeout: 1, "User-Agent" => "Super fun user agent" }
+  }
 ```
 
 ## TODO

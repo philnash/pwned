@@ -6,7 +6,7 @@ class PwnedValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     begin
-      pwned_check = Pwned::Password.new(value)
+      pwned_check = Pwned::Password.new(value, request_options)
       if pwned_check.pwned?
         record.errors.add(attribute, :pwned, options.merge(count: pwned_check.pwned_count))
       end
@@ -24,5 +24,9 @@ class PwnedValidator < ActiveModel::EachValidator
 
   def on_error
     options[:on_error] || DEFAULT_ON_ERROR
+  end
+
+  def request_options
+    options[:request_options] || {}
   end
 end
