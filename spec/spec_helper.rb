@@ -1,5 +1,8 @@
 require "bundler/setup"
+require "webmock/rspec"
 require "pwned"
+
+WebMock.disable_net_connect!
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
