@@ -52,9 +52,17 @@ RSpec.describe Pwned::Password do
     end
 
     it "raises a custom error" do
-      expect { password.pwned? }.to raise_error(Pwned::TimeoutError)
-      expect { password.pwned_count }.to raise_error(Pwned::TimeoutError)
+      expect { password.pwned? }.to raise_error(&method(:verify_timeout_error))
+      expect { password.pwned_count }.to raise_error(&method(:verify_timeout_error))
       expect(@stub).to have_been_requested.times(2)
+    end
+
+    def verify_timeout_error(error)
+      aggregate_failures "testing custom error" do
+        expect(error).to be_kind_of(Pwned::TimeoutError)
+        expect(error.message).to match(/execution expired/)
+        expect(error.cause).to be_kind_of(Net::OpenTimeout)
+      end
     end
   end
 
@@ -64,9 +72,17 @@ RSpec.describe Pwned::Password do
     end
 
     it "raises a custom error" do
-      expect { password.pwned? }.to raise_error(Pwned::Error)
-      expect { password.pwned_count }.to raise_error(Pwned::Error)
+      expect { password.pwned? }.to raise_error(&method(:verify_internal_error))
+      expect { password.pwned_count }.to raise_error(&method(:verify_internal_error))
       expect(@stub).to have_been_requested.times(2)
+    end
+
+    def verify_internal_error(error)
+      aggregate_failures "testing custom error" do
+        expect(error).to be_kind_of(Pwned::Error)
+        expect(error.message).to match(/500/)
+        expect(error.cause).to be_kind_of(OpenURI::HTTPError)
+      end
     end
   end
 
@@ -77,9 +93,17 @@ RSpec.describe Pwned::Password do
     end
 
     it "raises a custom error" do
-      expect { password.pwned? }.to raise_error(Pwned::Error)
-      expect { password.pwned_count }.to raise_error(Pwned::Error)
+      expect { password.pwned? }.to raise_error(&method(:verify_not_found_error))
+      expect { password.pwned_count }.to raise_error(&method(:verify_not_found_error))
       expect(@stub).to have_been_requested.times(2)
+    end
+
+    def verify_not_found_error(error)
+      aggregate_failures "testing custom error" do
+        expect(error).to be_kind_of(Pwned::Error)
+        expect(error.message).to match(/404/)
+        expect(error.cause).to be_kind_of(OpenURI::HTTPError)
+      end
     end
   end
 

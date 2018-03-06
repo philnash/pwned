@@ -35,16 +35,14 @@ module Pwned
     end
 
     def get_hashes
-      begin
-        open("#{API_URL}#{hashed_password[0..(HASH_PREFIX_LENGTH-1)]}", @request_options) do |io|
-          @hashes = io.read
-        end
-        @hashes
-      rescue Timeout::Error => e
-        raise Pwned::TimeoutError.new(e.message, e)
-      rescue => e
-        raise Pwned::Error.new(e.message, e)
+      open("#{API_URL}#{hashed_password[0..(HASH_PREFIX_LENGTH-1)]}", @request_options) do |io|
+        @hashes = io.read
       end
+      @hashes
+    rescue Timeout::Error => e
+      raise Pwned::TimeoutError, e.message
+    rescue => e
+      raise Pwned::Error, e.message
     end
 
     def match_data
