@@ -9,7 +9,7 @@ module Pwned
     HASH_PREFIX_LENGTH = 5
     DEFAULT_REQUEST_OPTIONS = {
       "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}"
-    }
+    }.freeze
 
     attr_reader :password
 
