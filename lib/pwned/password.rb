@@ -7,6 +7,7 @@ module Pwned
   class Password
     API_URL = "https://api.pwnedpasswords.com/range/"
     HASH_PREFIX_LENGTH = 5
+    SHA1_LENGTH = 40
     DEFAULT_REQUEST_OPTIONS = {
       "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}"
     }.freeze
@@ -37,10 +38,11 @@ module Pwned
     private
 
     def fetch_pwned_count
-      regex = /#{Regexp.escape hashed_password_suffix}:(\d+)/
+      suffix = hashed_password_suffix
       for_each_response_line do |line|
-        count = line[regex, 1]
-        return @pwned_count = count.to_i if count
+        next unless line.start_with?(suffix)
+        # Count starts after the suffix, followed by a colon
+        return @pwned_count = line[(SHA1_LENGTH-HASH_PREFIX_LENGTH+1)..-1].to_i
       end
 
       @pwned_count = 0
