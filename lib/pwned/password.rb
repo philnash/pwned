@@ -31,7 +31,7 @@ module Pwned
 
     # Returns number of times the password has been pwned.
     def pwned_count
-      regex = /^#{Regexp.escape hashed_password[HASH_PREFIX_LENGTH..-1]}:(\d+)$/
+      regex = /#{Regexp.escape hashed_password[HASH_PREFIX_LENGTH..-1]}:(\d+)/
       @pwned_count ||= hashes[regex, 1].to_i
     end
 
@@ -42,14 +42,16 @@ module Pwned
     end
 
     def get_hashes
-      open("#{API_URL}#{hashed_password[0...HASH_PREFIX_LENGTH]}", @request_options) do |io|
-        @hashes = io.read
+      begin
+        open("#{API_URL}#{hashed_password[0...HASH_PREFIX_LENGTH]}", @request_options) do |io|
+          @hashes = io.read
+        end
+        @hashes
+      rescue Timeout::Error => e
+        raise Pwned::TimeoutError, e.message
+      rescue => e
+        raise Pwned::Error, e.message
       end
-      @hashes
-    rescue Timeout::Error => e
-      raise Pwned::TimeoutError, e.message
-    rescue => e
-      raise Pwned::Error, e.message
     end
   end
 end
