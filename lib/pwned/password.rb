@@ -24,11 +24,12 @@ module Pwned
     end
 
     def pwned?
-      !!match_data
+      pwned_count > 0
     end
 
     def pwned_count
-      match_data ? match_data[1].to_i : 0
+      regex = /^#{Regexp.escape hashed_password[HASH_PREFIX_LENGTH..-1]}:(\d+)$/
+      @pwned_count ||= hashes[regex, 1].to_i
     end
 
     private
@@ -46,11 +47,6 @@ module Pwned
       raise Pwned::TimeoutError, e.message
     rescue => e
       raise Pwned::Error, e.message
-    end
-
-    def match_data
-      return @match_data if defined?(@match_data)
-      @match_data = hashes.match(/#{hashed_password[HASH_PREFIX_LENGTH..-1]}:(\d+)/)
     end
   end
 end
