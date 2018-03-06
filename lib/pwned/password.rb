@@ -33,7 +33,6 @@ module Pwned
     def get_hashes
       begin
         open("#{API_URL}#{hashed_password[0..(HASH_PREFIX_LENGTH-1)]}") do |io|
-        # open("./spec/fixtures/#{hashed_password[0..(HASH_PREFIX_LENGTH-1)]}.txt") do |io|
           @hashes = io.read
         end
         @hashes

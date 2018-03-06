@@ -1,6 +1,8 @@
 # Pwned
 
+Troy Hunt's [Pwned Passwords API V2](https://haveibeenpwned.com/API/v2#PwnedPasswords) allows you to check if a password has been found in any of the huge data breaches.
 
+`Pwned` is a Ruby library to use the Pwned Passwords API's [k-Anonymity model](https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/#cloudflareprivacyandkanonymity) to test a password against the API without sending the entire password to the service.
 
 ## Installation
 
@@ -20,7 +22,37 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To test a password against the API, instantiate a `Pwned::Password` object and then ask if it is `pwned?`.
+
+```ruby
+password = Pwned::Password.new("password")
+password.pwned?
+#=> true
+```
+
+You can also check how many times the password appears in the dataset.
+
+```ruby
+password = Pwned::Password.new("password")
+password.pwned_count
+#=> 3303003
+```
+
+Since you are likely using this as part of a signup flow, it is recommended that you rescue errors so if the service does go down, your user journey is not disturbed.
+
+```ruby
+begin
+  password = Pwned::Password.new("password")
+  password.pwned?
+rescue Pwned::Error => e
+  # Ummm... don't worry about it, I guess?
+end
+```
+
+## TODO
+
+- [ ] Rails validator
+- [ ] Devise plugin
 
 ## Development
 
