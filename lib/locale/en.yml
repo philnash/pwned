@@ -2,3 +2,4 @@ en:
   errors:
     messages:
       pwned: has previously appeared in a data breach and should not be used
+      pwned_error: could not be verified against the past data breaches

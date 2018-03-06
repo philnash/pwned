@@ -84,6 +84,25 @@ en:
   errors:
     messages:
       pwned: has been pwned %{count} times
+      pwned_error: might be pwned
+```
+
+By default the record will be treated as valid when we cannot reach [haveibeenpwned.com](https://haveibeenpwned.com/) servers. This could be changed via validator parameters:
+
+```ruby
+class User < ApplicationRecord
+  # The record is marked as valid on network errors.
+  validates :password, pwned: true
+  validates :password, pwned: { on_error: :valid }
+  # The record is marked as invalid on network errors
+  # (error message "could not be verified against the past data breaches".)
+  validates :password, pwned: { on_error: :invalid }
+  # The record is marked as invalid on network errors with custom error.
+  validates :password, pwned: { on_error: :invalid, error_message: "might be pwned" }
+  # We will raise an error on network errors. This means that `record.valid?` will raise `Pwned::Error`.
+  # Not recommended to use in production.
+  validates :password, pwned: { on_error: :raise_error }
+end
 ```
 
 ## TODO
