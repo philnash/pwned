@@ -1,5 +1,7 @@
 RSpec.describe Pwned::Password do
   let(:password) { Pwned::Password.new("password") }
+  let(:file_5BAA6) { File.new('./spec/fixtures/5BAA6.txt') }
+  let(:file_37D5B) { File.new('./spec/fixtures/37D5B.txt') }
 
   it "initializes with a password" do
     expect(password.password).to eq("password")
@@ -11,8 +13,7 @@ RSpec.describe Pwned::Password do
 
   describe "when pwned" do
     before(:example) do
-      file = File.new('./spec/fixtures/5BAA6.txt')
-      @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_return(body: file)
+      @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_return(body: file_5BAA6)
     end
 
     it "reports it is pwned" do
@@ -31,7 +32,7 @@ RSpec.describe Pwned::Password do
 
     before(:example) do
       file = File.new('./spec/fixtures/37D5B.txt')
-      @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/37D5B").to_return(body: file)
+      @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/37D5B").to_return(body: file_37D5B)
     end
 
     it "reports it is not pwned" do
@@ -47,7 +48,6 @@ RSpec.describe Pwned::Password do
 
   describe "when the API times out" do
     before(:example) do
-      file = File.new('./spec/fixtures/37D5B.txt')
       @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_timeout
     end
 
@@ -109,8 +109,7 @@ RSpec.describe Pwned::Password do
 
   describe "advanced requests" do
     before(:example) do
-      file = File.new('./spec/fixtures/5BAA6.txt')
-      stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_return(body: file)
+      stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_return(body: file_5BAA6)
     end
 
     it "sends a user agent with the current version" do
