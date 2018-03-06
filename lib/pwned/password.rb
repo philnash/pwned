@@ -12,6 +12,7 @@ module Pwned
     attr_reader :password
 
     def initialize(password, request_options={})
+      raise TypeError, "password must be of type String" unless password.is_a? String
       @password = password
       @request_options = DEFAULT_REQUEST_OPTIONS.merge(request_options)
     end

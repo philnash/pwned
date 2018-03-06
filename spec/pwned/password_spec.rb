@@ -7,6 +7,18 @@ RSpec.describe Pwned::Password do
     expect(password.password).to eq("password")
   end
 
+  it "doesn't initialize with an integer" do
+    expect { Pwned::Password.new(123) }.to raise_error(TypeError)
+  end
+
+  it "doesn't initialize with an array" do
+    expect { Pwned::Password.new(["hello", "world"]) }.to raise_error(TypeError)
+  end
+
+  it "doesn't initialize with a hash" do
+    expect { Pwned::Password.new({ a: "b", c: "d" }) }.to raise_error(TypeError)
+  end
+
   it "has a hashed version of the password" do
     expect(password.hashed_password).to eq("5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8")
   end
