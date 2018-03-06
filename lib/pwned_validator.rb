@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PwnedValidator < ActiveModel::EachValidator
   # We do not want to break customer sign-up process when the service is down.
   DEFAULT_ON_ERROR = :valid
