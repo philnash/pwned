@@ -6,6 +6,7 @@ env:
     - RAILS_VERSION=4.2.0
     - RAILS_VERSION=5.0.0
     - RAILS_VERSION=5.1.0
+    - RAILS_VERSION=5.2.0.rc1
 
 rvm:
   - 2.5.0
@@ -19,3 +20,4 @@ before_install: gem install bundler -v 1.16.1
 matrix:
   allow_failures:
     - rvm: ruby-head
+    - env: RAILS_VERSION=5.2.0.rc1
