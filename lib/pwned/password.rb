@@ -32,7 +32,7 @@ module Pwned
 
     # Returns number of times the password has been pwned.
     def pwned_count
-      @pwned_count || fetch_pwned_count
+      @pwned_count ||= fetch_pwned_count
     end
 
     private
@@ -42,10 +42,11 @@ module Pwned
       for_each_response_line do |line|
         next unless line.start_with?(suffix)
         # Count starts after the suffix, followed by a colon
-        return @pwned_count = line[(SHA1_LENGTH-HASH_PREFIX_LENGTH+1)..-1].to_i
+        return line[(SHA1_LENGTH-HASH_PREFIX_LENGTH+1)..-1].to_i
       end
 
-      @pwned_count = 0
+      # The hash was not found, we can assume the password is not pwned [yet]
+      0
     end
 
     def for_each_response_line(&block)
