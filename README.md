@@ -57,7 +57,7 @@ rescue Pwned::Error => e
 end
 ```
 
-### Advanced
+#### Advanced
 
 You can set options and headers to be used with `open-uri` when making the request to the API. HTTP headers must be string keys and the [other options are available in the `OpenURI::OpenRead` module](https://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open).
 
@@ -65,9 +65,72 @@ You can set options and headers to be used with `open-uri` when making the reque
 password = Pwned::Password.new("password", { 'User-Agent' => 'Super fun new user agent' })
 ```
 
+### ActiveRecord Validator
+
+There is a custom validator available for your ActiveRecord models:
+
+```ruby
+class User < ApplicationRecord
+  validates :password, pwned: true
+  # or
+  validates :password, pwned: { message: "has been pwned %{count} times" }
+end
+```
+
+#### I18n
+
+You can change the error message using I18n (use `%{count}` to interpolate the number of times the password was seen in the data breaches):
+
+```yaml
+en:
+  errors:
+    messages:
+      pwned: has been pwned %{count} times
+      pwned_error: might be pwned
+```
+
+#### Network Errors Handling
+
+By default the record will be treated as valid when we cannot reach [haveibeenpwned.com](https://haveibeenpwned.com/) servers. This could be changed via validator parameters:
+
+```ruby
+class User < ApplicationRecord
+  # The record is marked as valid on network errors.
+  validates :password, pwned: true
+  validates :password, pwned: { on_error: :valid }
+
+  # The record is marked as invalid on network errors
+  # (error message "could not be verified against the past data breaches".)
+  validates :password, pwned: { on_error: :invalid }
+
+  # The record is marked as invalid on network errors with custom error.
+  validates :password, pwned: { on_error: :invalid, error_message: "might be pwned" }
+
+  # We will raise an error on network errors.
+  # This means that `record.valid?` will raise `Pwned::Error`.
+  # Not recommended to use in production.
+  validates :password, pwned: { on_error: :raise_error }
+
+  # Call custom proc on error. For example, capture errors in Sentry,
+  # but do not mark the record as invalid.
+  validates :password, pwned: {
+    on_error: ->(record, error) { Raven.capture_exception(error) }
+  }
+end
+```
+
+#### Custom Request Options
+
+You can configure network requests made from the validator using `:request_options` (see [OpenURI::OpenRead#open](http://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open) for the list of available options, string keys represent custom network request headers, e.g. `"User-Agent"`):
+
+```ruby
+  validates :password, pwned: {
+    request_options: { read_timeout: 5, open_timeout: 1, "User-Agent" => "Super fun user agent" }
+  }
+```
+
 ## TODO
 
-- [ ] Rails validator
 - [ ] Devise plugin
 
 ## Development
