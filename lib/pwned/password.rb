@@ -46,15 +46,17 @@ module Pwned
       end
 
       @pwned_count = 0
-    rescue Timeout::Error => e
-      raise Pwned::TimeoutError, e.message
-    rescue => e
-      raise Pwned::Error, e.message
     end
 
     def for_each_response_line(&block)
-      open("#{API_URL}#{hashed_password_prefix}", @request_options) do |io|
-        io.each_line(&block)
+      begin
+        open("#{API_URL}#{hashed_password_prefix}", @request_options) do |io|
+          io.each_line(&block)
+        end
+      rescue Timeout::Error => e
+        raise Pwned::TimeoutError, e.message
+      rescue => e
+        raise Pwned::Error, e.message
       end
     end
 
