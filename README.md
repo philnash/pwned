@@ -98,9 +98,20 @@ en:
       pwned_error: might be pwned
 ```
 
+#### Threshold
+
+If you are ok with the password appearing a certain number of times before you decide it is invalid, you can set a threshold. The validator will check whether the `pwned_count` is greater than the threshold.
+
+```ruby
+class User < ApplicationRecord
+  # The record is marked as valid if the password has been used once in the breached data
+  validates :password, pwned: { threshold: 1 }
+end
+```
+
 #### Network Errors Handling
 
-By default the record will be treated as valid when we cannot reach [haveibeenpwned.com](https://haveibeenpwned.com/) servers. This could be changed via validator parameters:
+By default the record will be treated as valid when we cannot reach the [haveibeenpwned.com](https://haveibeenpwned.com/) servers. This can be changed with the `:on_error` validator parameter:
 
 ```ruby
 class User < ApplicationRecord

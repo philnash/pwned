@@ -7,7 +7,7 @@ require "pwned/password"
 begin
   # Load Rails and our custom validator
   require "active_model"
-  require_relative "pwned_validator"
+  require "pwned/pwned_validator"
 
   # Initialize I18n (validation error message)
   require "active_support/i18n"

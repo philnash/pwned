@@ -50,6 +50,29 @@ RSpec.describe PwnedValidator do
     end
   end
 
+  describe "with a threshold for pwned count", pwned_range: "613D1" do
+    it "reports the model as invalid when pwned count is above threshold" do
+      Model.validates :password, pwned: { threshold: 1 }
+      model = create_model("harlequin10")
+
+      expect(model).to_not be_valid
+    end
+
+    it "reports the model as valid when pwned count is below threshold" do
+      Model.validates :password, pwned: { threshold: 10 }
+      model = create_model("harlequin10")
+
+      expect(model).to be_valid
+    end
+
+    it "expects threshold to be an integer" do
+      Model.validates :password, pwned: { threshold: "10" }
+      model = create_model("harlequin10")
+
+      expect { model.valid? }.to raise_error(TypeError)
+    end
+  end
+
   describe "when the API times out" do
     before(:example) do
       @stub = stub_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").to_timeout
