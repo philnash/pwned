@@ -3,11 +3,12 @@
 class PwnedValidator < ActiveModel::EachValidator
   # We do not want to break customer sign-up process when the service is down.
   DEFAULT_ON_ERROR = :valid
+  DEFAULT_THRESHOLD = 0
 
   def validate_each(record, attribute, value)
     begin
       pwned_check = Pwned::Password.new(value, request_options)
-      if pwned_check.pwned?
+      if pwned_check.pwned_count > threshold
         record.errors.add(attribute, :pwned, options.merge(count: pwned_check.pwned_count))
       end
     rescue Pwned::Error => error
@@ -30,5 +31,11 @@ class PwnedValidator < ActiveModel::EachValidator
 
   def request_options
     options[:request_options] || {}
+  end
+
+  def threshold
+    threshold = options[:threshold] || DEFAULT_THRESHOLD
+    raise TypeError, "PwnedValidator option 'threshold' must be of type Integer" unless threshold.is_a? Integer
+    threshold
   end
 end
