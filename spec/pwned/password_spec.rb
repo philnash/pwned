@@ -37,6 +37,11 @@ RSpec.describe Pwned::Password do
       expect(password.pwned?).to be true
       expect(@stub).to have_been_requested
     end
+
+    it "works with simplified accessors" do
+      expect(Pwned.pwned?(password.password)).to be true
+      expect(Pwned.pwned_count(password.password)).to eq(3303003)
+    end
   end
 
   describe "when not pwned", pwned_range: "37D5B" do
@@ -50,6 +55,11 @@ RSpec.describe Pwned::Password do
     it "reports it has been pwned zero times" do
       expect(password.pwned_count).to eq(0)
       expect(@stub).to have_been_requested
+    end
+
+    it "works with simplified accessors" do
+      expect(Pwned.pwned?(password.password)).to be false
+      expect(Pwned.pwned_count(password.password)).to eq(0)
     end
   end
 

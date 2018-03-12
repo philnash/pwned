@@ -57,6 +57,15 @@ rescue Pwned::Error => e
 end
 ```
 
+Most of the times you only care if the password has been pwned before or not. You can use simplified accessors to check whether the password has been pwned, or how many times it was pwned:
+
+```ruby
+Pwned.pwned?("password")
+#=> true
+Pwned.pwned_count("password")
+#=> 3303003
+```
+
 #### Advanced
 
 You can set options and headers to be used with `open-uri` when making the request to the API. HTTP headers must be string keys and the [other options are available in the `OpenURI::OpenRead` module](https://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open).
