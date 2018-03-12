@@ -2,7 +2,7 @@
 
 An easy, Ruby way to use the Pwned Passwords API.
 
-[![Build Status](https://travis-ci.org/philnash/pwned.svg?branch=master)](https://travis-ci.org/philnash/pwned)
+[![Build Status](https://travis-ci.org/philnash/pwned.svg?branch=master)](https://travis-ci.org/philnash/pwned) [![Maintainability](https://codeclimate.com/github/philnash/pwned/badges/gpa.svg)](https://codeclimate.com/github/philnash/pwned/maintainability)
 
 [API docs](https://philnash.github.io/pwned/) | [GitHub repo](https://github.com/philnash/pwned)
 
