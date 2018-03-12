@@ -7,4 +7,5 @@ RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 
 YARD::Rake::YardocTask.new do |t|
+  t.options = ["--output-dir", "docs"]
 end

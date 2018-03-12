@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.12
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "README";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-Pwned">Pwned</h1>
+
+<p>An easy, Ruby way to use the Pwned Passwords API.</p>
+
+<p><a href="https://travis-ci.org/philnash/pwned"><img
+src="https://travis-ci.org/philnash/pwned.svg?branch=master"></a></p>
+
+<p>Troy Hunt&#39;s <a
+href="https://haveibeenpwned.com/API/v2#PwnedPasswords">Pwned Passwords API
+V2</a> allows you to check if a password has been found in any of the huge
+data breaches.</p>
+
+<p><code>Pwned</code> is a Ruby library to use the Pwned Passwords API&#39;s
+<a
+href="https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/#cloudflareprivacyandkanonymity">k-Anonymity
+model</a> to test a password against the API without sending the entire
+password to the service.</p>
+
+<p>The data from this API is provided by <a
+href="https://haveibeenpwned.com/">Have I been pwned?</a>. Before using the
+API, please check <a
+href="https://haveibeenpwned.com/API/v2#AcceptableUse">the acceptable uses
+and license of the API</a>.</p>
+
+<h2 id="label-Installation">Installation</h2>
+
+<p>Add this line to your application&#39;s Gemfile:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>pwned</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<p>And then execute:</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle
+</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre class="code ruby"><code class="ruby">$ gem install pwned
+</code></pre>
+
+<h2 id="label-Usage">Usage</h2>
+
+<p>To test a password against the API, instantiate a
+<code>Pwned::Password</code> object and then ask if it is
+<code>pwned?</code>.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_password'>password</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Pwned.html" title="Pwned (module)">Pwned</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Pwned/Password.html" title="Pwned::Password (class)">Password</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Pwned/Password.html#initialize-instance_method" title="Pwned::Password#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>password</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_password'>password</span><span class='period'>.</span><span class='id identifier rubyid_pwned?'>pwned?</span>
+<span class='comment'>#=&gt; true
+</span><span class='id identifier rubyid_password'>password</span><span class='period'>.</span><span class='id identifier rubyid_pwned_count'>pwned_count</span>
+<span class='comment'>#=&gt; 3303003
+</span></code></pre>
+
+<p>You can also check how many times the password appears in the dataset.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_password'>password</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Pwned.html" title="Pwned (module)">Pwned</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Pwned/Password.html" title="Pwned::Password (class)">Password</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Pwned/Password.html#initialize-instance_method" title="Pwned::Password#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>password</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_password'>password</span><span class='period'>.</span><span class='id identifier rubyid_pwned_count'>pwned_count</span>
+<span class='comment'>#=&gt; 3303003
+</span></code></pre>
+
+<p>Since you are likely using this as part of a signup flow, it is recommended
+that you rescue errors so if the service does go down, your user journey is
+not disturbed.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>begin</span>
+  <span class='id identifier rubyid_password'>password</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Pwned.html" title="Pwned (module)">Pwned</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Pwned/Password.html" title="Pwned::Password (class)">Password</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Pwned/Password.html#initialize-instance_method" title="Pwned::Password#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>password</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_password'>password</span><span class='period'>.</span><span class='id identifier rubyid_pwned?'>pwned?</span>
+<span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="Pwned.html" title="Pwned (module)">Pwned</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Pwned/Error.html" title="Pwned::Error (class)">Error</a></span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='comment'># Ummm... don&#39;t worry about it, I guess?
+</span><span class='kw'>end</span>
+</code></pre>
+
+<p>Most of the times you only care if the password has been pwned before or
+not. You can use simplified accessors to check whether the password has
+been pwned, or how many times it was pwned:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Pwned.html" title="Pwned (module)">Pwned</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pwned?'><span class='object_link'><a href="Pwned.html#pwned%3F-class_method" title="Pwned.pwned? (method)">pwned?</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>password</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='comment'>#=&gt; true
+</span><span class='const'><span class='object_link'><a href="Pwned.html" title="Pwned (module)">Pwned</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pwned_count'><span class='object_link'><a href="Pwned.html#pwned_count-class_method" title="Pwned.pwned_count (method)">pwned_count</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>password</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='comment'>#=&gt; 3303003
+</span></code></pre>
+
+<h4 id="label-Advanced">Advanced</h4>
+
+<p>You can set options and headers to be used with <code>open-uri</code> when
+making the request to the API. HTTP headers must be string keys and the <a
+href="https://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open">other
+options are available in the OpenURI::OpenRead module</a>.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_password'>password</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Pwned.html" title="Pwned (module)">Pwned</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Pwned/Password.html" title="Pwned::Password (class)">Password</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Pwned/Password.html#initialize-instance_method" title="Pwned::Password#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>password</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='lbrace'>{</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>User-Agent</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Super fun new user agent</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span><span class='rparen'>)</span>
+</code></pre>
+
+<h3 id="label-ActiveRecord+Validator">ActiveRecord Validator</h3>
+
+<p>There is a custom validator available for your ActiveRecord models:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>User</span> <span class='op'>&lt;</span> <span class='const'>ApplicationRecord</span>
+  <span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='kw'>true</span>
+  <span class='comment'># or
+</span>  <span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='lbrace'>{</span> <span class='label'>message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>has been pwned %{count} times</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h4 id="label-I18n">I18n</h4>
+
+<p>You can change the error message using I18n (use <code>%{count}</code> to
+interpolate the number of times the password was seen in the data
+breaches):</p>
+
+<pre class="code ruby"><code class="ruby">en:
+  errors:
+    messages:
+      pwned: has been pwned %{count} times
+      pwned_error: might be pwned
+</code></pre>
+
+<h4 id="label-Threshold">Threshold</h4>
+
+<p>If you are ok with the password appearing a certain number of times before
+you decide it is invalid, you can set a threshold. The validator will check
+whether the <code>pwned_count</code> is greater than the threshold.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>User</span> <span class='op'>&lt;</span> <span class='const'>ApplicationRecord</span>
+  <span class='comment'># The record is marked as valid if the password has been used once in the breached data
+</span>  <span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='lbrace'>{</span> <span class='label'>threshold:</span> <span class='int'>1</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h4 id="label-Network+Errors+Handling">Network Errors Handling</h4>
+
+<p>By default the record will be treated as valid when we cannot reach the <a
+href="https://haveibeenpwned.com/">haveibeenpwned.com</a> servers. This can
+be changed with the <code>:on_error</code> validator parameter:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>User</span> <span class='op'>&lt;</span> <span class='const'>ApplicationRecord</span>
+  <span class='comment'># The record is marked as valid on network errors.
+</span>  <span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='kw'>true</span>
+  <span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='lbrace'>{</span> <span class='label'>on_error:</span> <span class='symbol'>:valid</span> <span class='rbrace'>}</span>
+
+  <span class='comment'># The record is marked as invalid on network errors
+</span>  <span class='comment'># (error message &quot;could not be verified against the past data breaches&quot;.)
+</span>  <span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='lbrace'>{</span> <span class='label'>on_error:</span> <span class='symbol'>:invalid</span> <span class='rbrace'>}</span>
+
+  <span class='comment'># The record is marked as invalid on network errors with custom error.
+</span>  <span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='lbrace'>{</span> <span class='label'>on_error:</span> <span class='symbol'>:invalid</span><span class='comma'>,</span> <span class='label'>error_message:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>might be pwned</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span>
+
+  <span class='comment'># We will raise an error on network errors.
+</span>  <span class='comment'># This means that `record.valid?` will raise `Pwned::Error`.
+</span>  <span class='comment'># Not recommended to use in production.
+</span>  <span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='lbrace'>{</span> <span class='label'>on_error:</span> <span class='symbol'>:raise_error</span> <span class='rbrace'>}</span>
+
+  <span class='comment'># Call custom proc on error. For example, capture errors in Sentry,
+</span>  <span class='comment'># but do not mark the record as invalid.
+</span>  <span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='lbrace'>{</span>
+    <span class='label'>on_error:</span> <span class='tlambda'>-&gt;</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='comma'>,</span> <span class='id identifier rubyid_error'>error</span><span class='rparen'>)</span> <span class='tlambeg'>{</span> <span class='const'>Raven</span><span class='period'>.</span><span class='id identifier rubyid_capture_exception'>capture_exception</span><span class='lparen'>(</span><span class='id identifier rubyid_error'>error</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  <span class='rbrace'>}</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h4 id="label-Custom+Request+Options">Custom Request Options</h4>
+
+<p>You can configure network requests made from the validator using
+<code>:request_options</code> (see <a
+href="http://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open">OpenURI::OpenRead#open</a>
+for the list of available options, string keys represent custom network
+request headers, e.g. <code>&quot;User-Agent&quot;</code>):</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_validates'>validates</span> <span class='symbol'>:password</span><span class='comma'>,</span> <span class='label'>pwned:</span> <span class='lbrace'>{</span>
+    <span class='label'>request_options:</span> <span class='lbrace'>{</span> <span class='label'>read_timeout:</span> <span class='int'>5</span><span class='comma'>,</span> <span class='label'>open_timeout:</span> <span class='int'>1</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>User-Agent</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Super fun user agent</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span>
+  <span class='rbrace'>}</span>
+</code></pre>
+
+<h2 id="label-TODO">TODO</h2>
+<ul><li>
+<p>[ ] Devise plugin</p>
+</li></ul>
+
+<h2 id="label-Development">Development</h2>
+
+<p>After checking out the repo, run <code>bin/setup</code> to install
+dependencies. Then, run <code>rake spec</code> to run the tests. You can
+also run <code>bin/console</code> for an interactive prompt that will allow
+you to experiment.</p>
+
+<p>To install this gem onto your local machine, run <code>bundle exec rake
+install</code>. To release a new version, update the version number in
+<code>version.rb</code>, and then run <code>bundle exec rake
+release</code>, which will create a git tag for the version, push git
+commits and tags, and push the <code>.gem</code> file to <a
+href="https://rubygems.org">rubygems.org</a>.</p>
+
+<h2 id="label-Contributing">Contributing</h2>
+
+<p>Bug reports and pull requests are welcome on GitHub at <a
+href="https://github.com/philnash/pwned">github.com/philnash/pwned</a>.
+This project is intended to be a safe, welcoming space for collaboration,
+and contributors are expected to adhere to the <a
+href="http://contributor-covenant.org">Contributor Covenant</a> code of
+conduct.</p>
+
+<h2 id="label-License">License</h2>
+
+<p>The gem is available as open source under the terms of the <a
+href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+
+<h2 id="label-Code+of+Conduct">Code of Conduct</h2>
+
+<p>Everyone interacting in the Pwned project’s codebases, issue trackers, chat
+rooms and mailing lists is expected to follow the <a
+href="https://github.com/philnash/pwned/blob/master/CODE_OF_CONDUCT.md">code
+of conduct</a>.</p>
+</div></div>
+
+      <div id="footer">
+  Generated on Tue Mar 13 00:43:11 2018 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.12 (ruby-2.5.0).
+</div>
+
+    </div>
+  </body>
+</html>
