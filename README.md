@@ -4,6 +4,10 @@ An easy, Ruby way to use the Pwned Passwords API.
 
 [![Build Status](https://travis-ci.org/philnash/pwned.svg?branch=master)](https://travis-ci.org/philnash/pwned)
 
+[API docs](https://philnash.github.io/pwned/) | [GitHub repo](https://github.com/philnash/pwned)
+
+## About
+
 Troy Hunt's [Pwned Passwords API V2](https://haveibeenpwned.com/API/v2#PwnedPasswords) allows you to check if a password has been found in any of the huge data breaches.
 
 `Pwned` is a Ruby library to use the Pwned Passwords API's [k-Anonymity model](https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/#cloudflareprivacyandkanonymity) to test a password against the API without sending the entire password to the service.
