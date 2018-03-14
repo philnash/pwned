@@ -65,7 +65,7 @@ class NotPwnedValidator < ActiveModel::EachValidator
     begin
       pwned_check = Pwned::Password.new(value, request_options)
       if pwned_check.pwned_count > threshold
-        record.errors.add(attribute, :pwned, options.merge(count: pwned_check.pwned_count))
+        record.errors.add(attribute, :not_pwned, options.merge(count: pwned_check.pwned_count))
       end
     rescue Pwned::Error => error
       case on_error

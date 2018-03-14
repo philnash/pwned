@@ -98,7 +98,7 @@ You can change the error message using I18n (use `%{count}` to interpolate the n
 en:
   errors:
     messages:
-      pwned: has been pwned %{count} times
+      not_pwned: has been pwned %{count} times
       pwned_error: might be pwned
 ```
 
