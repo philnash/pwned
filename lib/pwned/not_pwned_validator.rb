@@ -5,42 +5,42 @@
 #
 # @example Validate a password on a +User+ model with the default options.
 #     class User < ApplicationRecord
-#       validates :password, pwned: true
+#       validates :password, not_pwned: true
 #     end
 #
 # @example Validate a password on a +User+ model with a custom error message.
 #     class User < ApplicationRecord
-#       validates :password, pwned: { message: "has been pwned %{count} times" }
+#       validates :password, not_pwned: { message: "has been pwned %{count} times" }
 #     end
 #
 # @example Validate a password on a +User+ model that allows the password to have been breached once.
 #     class User < ApplicationRecord
-#       validates :password, pwned: { threshold: 1 }
+#       validates :password, not_pwned: { threshold: 1 }
 #     end
 #
 # @example Validate a password on a +User+ model, handling API errors in various ways
 #     class User < ApplicationRecord
 #       # The record is marked as invalid on network errors
 #       # (error message "could not be verified against the past data breaches".)
-#       validates :password, pwned: { on_error: :invalid }
+#       validates :password, not_pwned: { on_error: :invalid }
 #
 #       # The record is marked as invalid on network errors with custom error.
-#       validates :password, pwned: { on_error: :invalid, error_message: "might be pwned" }
+#       validates :password, not_pwned: { on_error: :invalid, error_message: "might be pwned" }
 #
 #       # An error is raised on network errors.
 #       # This means that `record.valid?` will raise `Pwned::Error`.
 #       # Not recommended to use in production.
-#       validates :password, pwned: { on_error: :raise_error }
+#       validates :password, not_pwned: { on_error: :raise_error }
 #
 #       # Call custom proc on error. For example, capture errors in Sentry,
 #       # but do not mark the record as invalid.
-#       validates :password, pwned: {
+#       validates :password, not_pwned: {
 #         on_error: ->(record, error) { Raven.capture_exception(error) }
 #       }
 #     end
 #
-# @since 1.1.0
-class PwnedValidator < ActiveModel::EachValidator
+# @since 1.2.0
+class NotPwnedValidator < ActiveModel::EachValidator
   ##
   # The default behaviour of this validator in the case of an API failure. The
   # default will mean that if the API fails the object will not be marked
@@ -93,7 +93,26 @@ class PwnedValidator < ActiveModel::EachValidator
 
   def threshold
     threshold = options[:threshold] || DEFAULT_THRESHOLD
-    raise TypeError, "PwnedValidator option 'threshold' must be of type Integer" unless threshold.is_a? Integer
+    raise TypeError, "#{self.class.to_s} option 'threshold' must be of type Integer" unless threshold.is_a? Integer
     threshold
   end
+end
+
+##
+# The version 1.1.0 validator that uses `pwned` in the validate method.
+# This has been updated to the above `not_pwned` validator to be clearer what
+# is being validated.
+#
+# This class is being maintained for backwards compatitibility but will be
+# removed
+#
+# @example Validate a password on a +User+ model with the default options.
+#     class User < ApplicationRecord
+#       validates :password, pwned: true
+#     end
+#
+# @deprecated use the +NotPwnedValidator+ instead.
+#
+# @since 1.1.0
+class PwnedValidator < NotPwnedValidator
 end
