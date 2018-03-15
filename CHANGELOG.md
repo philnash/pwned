@@ -2,6 +2,10 @@
 
 ## Ongoing [☰](https://github.com/philnash/pwned/compare/v1.1.0...master)
 
+...
+
+## 1.2.0 (March 15, 2018) [☰](https://github.com/philnash/pwned/commits/v1.2.0)
+
 * Major updates
   * Changes `PwnedValidator` to `NotPwnedValidator`, so that the validation looks like `validates :password, not_pwned: true`. `PwnedValidator` now subclasses `NotPwnedValidator` for backwards compatibility with version 1.1.0 but is deprecated.
 
