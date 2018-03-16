@@ -13,6 +13,14 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/philnash/pwned"
   spec.license       = "MIT"
 
+  spec.metadata      = {
+    "bug_tracker_uri"   => "https://github.com/philnash/pwned/issues",
+    "change_log_uri"    => "https://github.com/philnash/pwned/blob/master/CHANGELOG.md",
+    "documentation_uri" => "https://philnash.github.io/pwned/",
+    "homepage_uri"      => "https://github.com/philnash/pwned",
+    "source_code_uri"   => "https://github.com/philnash/pwned"
+  }
+
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
