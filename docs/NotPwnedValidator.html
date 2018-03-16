@@ -335,11 +335,72 @@ then the record is marked as invalid.</p>
 valid or invalid. Alternatively it will run an associated proc or re-raise
 the original error.</p>
 
+<p>The validation will short circuit and return with no errors added if the
+password is blank. The <code>Pwned::Password</code> initializer expects the
+password to be a string and will throw a <code>TypeError</code> if it is
+<code>nil</code>. Also, technically the empty string is not a password that
+is reported to be found in data breaches, so returns <code>false</code>,
+short circuiting that using <code>value.blank?</code> saves us a trip to
+the API.</p>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>record</span>
+      
+      
+        <span class='type'>(<tt>ActiveModel::Validations</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The object being validated</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>attribute</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The attribute on the record that is currently being validated.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The value of the attribute on the record that is the subject of the
+validation</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 <p class="tag_title">Since:</p>
 <ul class="since">
   
@@ -363,30 +424,32 @@ the original error.</p>
       <pre class="lines">
 
 
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
 77
 78
 79
 80
 81
-82</pre>
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/pwned/not_pwned_validator.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'lib/pwned/not_pwned_validator.rb', line 77</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_validate_each'>validate_each</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='comma'>,</span> <span class='id identifier rubyid_attribute'>attribute</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
   <span class='kw'>begin</span>
     <span class='id identifier rubyid_pwned_check'>pwned_check</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Pwned.html" title="Pwned (module)">Pwned</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Pwned/Password.html" title="Pwned::Password (class)">Password</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Pwned/Password.html#initialize-instance_method" title="Pwned::Password#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_request_options'>request_options</span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_pwned_check'>pwned_check</span><span class='period'>.</span><span class='id identifier rubyid_pwned_count'>pwned_count</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_threshold'>threshold</span>
@@ -415,7 +478,7 @@ the original error.</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Mar 14 11:06:58 2018 by
+  Generated on Sat Mar 17 09:15:06 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.12 (ruby-2.5.0).
 </div>
