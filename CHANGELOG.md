@@ -4,17 +4,17 @@
 
 ...
 
-## 1.2.1 (March 17, 2018) [☰](https://github.com/philnash/pwned/commits/v1.2.1)
+## 1.2.1 (March 17, 2018) [☰](https://github.com/philnash/pwned/compare/v1.2.0...v1.2.1)
 
 * Minor updates
   * Validator no longer raises `TypeError` when password is `nil`
 
-## 1.2.0 (March 15, 2018) [☰](https://github.com/philnash/pwned/commits/v1.2.0)
+## 1.2.0 (March 15, 2018) [☰](https://github.com/philnash/pwned/compare/v1.1.0...v1.2.0)
 
 * Major updates
   * Changes `PwnedValidator` to `NotPwnedValidator`, so that the validation looks like `validates :password, not_pwned: true`. `PwnedValidator` now subclasses `NotPwnedValidator` for backwards compatibility with version 1.1.0 but is deprecated.
 
-## 1.1.0 (March 12, 2018) [☰](https://github.com/philnash/pwned/commits/v1.1.0)
+## 1.1.0 (March 12, 2018) [☰](https://github.com/philnash/pwned/compare/v1.0.0...v1.1.0)
 
 * Major updates
   * Refactors exception handling with built in Ruby method ([PR #1](https://github.com/philnash/pwned/pull/1) thanks [@kpumuk](https://github.com/kpumuk))
