@@ -1,8 +1,13 @@
 # Changelog for `Pwned`
 
-## Ongoing [☰](https://github.com/philnash/pwned/compare/v1.1.0...master)
+## Ongoing [☰](https://github.com/philnash/pwned/compare/v1.2.1...master)
 
 ...
+
+## 1.2.1 (March 17, 2018) [☰](https://github.com/philnash/pwned/commits/v1.2.1)
+
+* Minor updates
+  * Validator no longer raises `TypeError` when password is `nil`
 
 ## 1.2.0 (March 15, 2018) [☰](https://github.com/philnash/pwned/commits/v1.2.0)
 
