@@ -128,6 +128,21 @@ RSpec.describe NotPwnedValidator do
       expect { model.valid? }.to raise_error(RuntimeError, "custom proc")
     end
   end
+
+  describe "when the model's password is not present" do
+    it "is valid with a `nil` password" do
+      Model.validates :password, not_pwned: true
+      model = Model.new
+      expect(model).to be_valid
+    end
+
+    it "is valid with a `blank` password" do
+      Model.validates :password, not_pwned: true
+      model = Model.new
+      model.password = ""
+      expect(model).to be_valid
+    end
+  end
 end
 
 # Supports the 1.1.0 `pwned: true` validation. Should be removed eventually.

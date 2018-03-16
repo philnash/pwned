@@ -61,7 +61,21 @@ class NotPwnedValidator < ActiveModel::EachValidator
   # In the case of an API error the validator will either mark the
   # record as valid or invalid. Alternatively it will run an associated proc or
   # re-raise the original error.
+  #
+  # The validation will short circuit and return with no errors added if the
+  # password is blank. The +Pwned::Password+ initializer expects the password to
+  # be a string and will throw a +TypeError+ if it is +nil+. Also, technically
+  # the empty string is not a password that is reported to be found in data
+  # breaches, so returns +false+, short circuiting that using +value.blank?+
+  # saves us a trip to the API.
+  #
+  # @param record [ActiveModel::Validations] The object being validated
+  # @param attribute [Symbol] The attribute on the record that is currently
+  #   being validated.
+  # @param value [String] The value of the attribute on the record that is the
+  #   subject of the validation
   def validate_each(record, attribute, value)
+    return if value.blank?
     begin
       pwned_check = Pwned::Password.new(value, request_options)
       if pwned_check.pwned_count > threshold
