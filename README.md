@@ -14,6 +14,8 @@ Troy Hunt's [Pwned Passwords API V2](https://haveibeenpwned.com/API/v2#PwnedPass
 
 The data from this API is provided by [Have I been pwned?](https://haveibeenpwned.com/). Before using the API, please check [the acceptable uses and license of the API](https://haveibeenpwned.com/API/v2#AcceptableUse).
 
+Here is a blog post I wrote on [how to use this gem in your Ruby applications to make your users' passwords better](https://www.twilio.com/blog/2018/03/better-passwords-in-ruby-applications-pwned-passwords-api.html).
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -31,6 +33,14 @@ Or install it yourself as:
     $ gem install pwned
 
 ## Usage
+
+There are a few ways you can use this gem:
+
+1. [Plain Ruby](#plain-ruby)
+2. [Rails](#activerecord-validator)
+3. [Rails and Devise](#devise)
+
+### Plain Ruby
 
 To test a password against the API, instantiate a `Pwned::Password` object and then ask if it is `pwned?`.
 
@@ -113,7 +123,7 @@ class User < ApplicationRecord
 end
 ```
 
-#### Network Errors Handling
+#### Network Error Handling
 
 By default the record will be treated as valid when we cannot reach the [haveibeenpwned.com](https://haveibeenpwned.com/) servers. This can be changed with the `:on_error` validator parameter:
 
@@ -153,9 +163,9 @@ You can configure network requests made from the validator using `:request_optio
   }
 ```
 
-## TODO
+### Devise
 
-- [ ] Devise plugin
+If you are using Devise I recommend you use the [devise-pwned_password extension](https://github.com/michaelbanfield/devise-pwned_password) which is now powered by this gem.
 
 ## Development
 
