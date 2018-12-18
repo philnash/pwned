@@ -6,6 +6,20 @@ An easy, Ruby way to use the Pwned Passwords API.
 
 [API docs](https://philnash.github.io/pwned/) | [GitHub repo](https://github.com/philnash/pwned)
 
+## Table of Contents
+
+* [About](#about)
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Plain Ruby](#plain-ruby)
+  * [Rails (ActiveRecord)](#activerecord-validator)
+  * [Devise](#devise)
+* [How Pwned is Pi?](#how-pwned-is-pi)
+* [Development](#development)
+* [Contributing](#contributing)
+* [License](#license)
+* [Code of Conduct](#code-of-conduct)
+
 ## About
 
 Troy Hunt's [Pwned Passwords API V2](https://haveibeenpwned.com/API/v2#PwnedPasswords) allows you to check if a password has been found in any of the huge data breaches.
@@ -166,6 +180,71 @@ You can configure network requests made from the validator using `:request_optio
 ### Devise
 
 If you are using Devise I recommend you use the [devise-pwned_password extension](https://github.com/michaelbanfield/devise-pwned_password) which is now powered by this gem.
+
+## How Pwned is Pi?
+
+[@daz](https://github.com/daz) [shared](https://twitter.com/dazonic/status/1074647842046660609) a fantastic example of using this gem to show how many times the digits of Pi have been used as passwords and leaked.
+
+```ruby
+require 'pwned'
+
+PI = '3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111'
+
+for n in 1..40
+  password = Pwned::Password.new PI[0..(n + 1)]
+  str = [ n.to_s.rjust(2) ]
+  str << (password.pwned? ? '😡' : '😃')
+  str << password.pwned_count.to_s.rjust(4)
+  str << password.password
+
+  puts str.join ' '
+end
+```
+
+The results may, or may not, surprise you.
+
+```
+ 1 😡   16 3.1
+ 2 😡  238 3.14
+ 3 😡   34 3.141
+ 4 😡 1345 3.1415
+ 5 😡 2552 3.14159
+ 6 😡  791 3.141592
+ 7 😡 9582 3.1415926
+ 8 😡 1591 3.14159265
+ 9 😡  637 3.141592653
+10 😡  873 3.1415926535
+11 😡  137 3.14159265358
+12 😡  103 3.141592653589
+13 😡   65 3.1415926535897
+14 😡  201 3.14159265358979
+15 😡   41 3.141592653589793
+16 😡   57 3.1415926535897932
+17 😡   28 3.14159265358979323
+18 😡   29 3.141592653589793238
+19 😡    1 3.1415926535897932384
+20 😡    7 3.14159265358979323846
+21 😡    5 3.141592653589793238462
+22 😡    2 3.1415926535897932384626
+23 😡    2 3.14159265358979323846264
+24 😃    0 3.141592653589793238462643
+25 😡    3 3.1415926535897932384626433
+26 😃    0 3.14159265358979323846264338
+27 😃    0 3.141592653589793238462643383
+28 😃    0 3.1415926535897932384626433832
+29 😃    0 3.14159265358979323846264338327
+30 😃    0 3.141592653589793238462643383279
+31 😃    0 3.1415926535897932384626433832795
+32 😃    0 3.14159265358979323846264338327950
+33 😃    0 3.141592653589793238462643383279502
+34 😃    0 3.1415926535897932384626433832795028
+35 😃    0 3.14159265358979323846264338327950288
+36 😃    0 3.141592653589793238462643383279502884
+37 😃    0 3.1415926535897932384626433832795028841
+38 😃    0 3.14159265358979323846264338327950288419
+39 😃    0 3.141592653589793238462643383279502884197
+40 😃    0 3.1415926535897932384626433832795028841971
+```
 
 ## Development
 
