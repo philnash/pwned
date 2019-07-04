@@ -98,7 +98,7 @@ RSpec.describe Pwned::Password do
       aggregate_failures "testing custom error" do
         expect(error).to be_kind_of(Pwned::Error)
         expect(error.message).to match(/500/)
-        expect(error.cause).to be_kind_of(OpenURI::HTTPError)
+        expect(error.cause).to be_kind_of(Net::HTTPFatalError)
       end
     end
   end
@@ -119,7 +119,7 @@ RSpec.describe Pwned::Password do
       aggregate_failures "testing custom error" do
         expect(error).to be_kind_of(Pwned::Error)
         expect(error.message).to match(/404/)
-        expect(error.cause).to be_kind_of(OpenURI::HTTPError)
+        expect(error.cause).to be_kind_of(Net::HTTPServerException)
       end
     end
   end

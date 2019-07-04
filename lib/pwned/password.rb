@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "digest"
-require "open-uri"
+require 'net/http'
 
 module Pwned
   ##
@@ -106,8 +106,9 @@ module Pwned
 
     def for_each_response_line(&block)
       begin
-        open("#{API_URL}#{hashed_password_prefix}", @request_options) do |io|
-          io.each_line(&block)
+        with_http_response "#{API_URL}#{hashed_password_prefix}", @request_options do |response|
+          response.value # raise if request was unsuccessful (!?)
+          stream_response_lines(response, &block)
         end
       rescue Timeout::Error => e
         raise Pwned::TimeoutError, e.message
@@ -123,5 +124,31 @@ module Pwned
     def hashed_password_suffix
       hashed_password[HASH_PREFIX_LENGTH..-1]
     end
+
+    # Make a HTTP GET request given the url and headers.
+    # Yields a `Net::HTTPResponse`.
+    def with_http_response(url, headers, &block)
+      uri = URI(url)
+
+      request = Net::HTTP::Get.new(uri)
+      request.initialize_http_header(headers)
+
+      Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+        http.request(request, &block)
+      end
+    end
+
+    # Stream a Net::HTTPResponse by line, handling lines that cross chunks.
+    def stream_response_lines(response, &block)
+      last_line = ''
+
+      response.read_body do |chunk|
+        chunk_lines = (last_line + chunk).lines
+        # This could end with half a line, so save it for next time
+        last_line = chunk_lines.pop
+        chunk_lines.each(&block)
+      end
+    end
+
   end
 end
