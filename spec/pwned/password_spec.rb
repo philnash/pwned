@@ -142,4 +142,15 @@ RSpec.describe Pwned::Password do
         to have_been_made.once
     end
   end
+
+  describe 'streaming', pwned_range: "A0F41" do
+    let(:password) { Pwned::Password.new("fake-password") }
+
+    # Since our streaming is yielding by line across chunks, ensure we're not
+    # missing lines by checking a single line file
+    it "streams the whole file" do
+      expect(password).to be_pwned
+    end
+  end
+
 end

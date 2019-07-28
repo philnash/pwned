@@ -107,7 +107,7 @@ module Pwned
     def for_each_response_line(&block)
       begin
         with_http_response "#{API_URL}#{hashed_password_prefix}", @request_options do |response|
-          response.value # raise if request was unsuccessful (!?)
+          response.value # raise if request was unsuccessful
           stream_response_lines(response, &block)
         end
       rescue Timeout::Error => e
@@ -148,6 +148,7 @@ module Pwned
         last_line = chunk_lines.pop
         chunk_lines.each(&block)
       end
+      yield last_line
     end
 
   end
