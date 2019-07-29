@@ -134,7 +134,7 @@ RSpec.describe Pwned::Password do
     end
 
     it "allows the user agent to be set" do
-      password = Pwned::Password.new("password", { "User-Agent" => "Super fun user agent" })
+      password = Pwned::Password.new("password", headers: { "User-Agent" => "Super fun user agent" })
       password.pwned?
 
       expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").

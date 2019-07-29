@@ -23,10 +23,10 @@ module Pwned
     SHA1_LENGTH = 40
 
     ##
-    # The default request options that are used to make HTTP requests to the
+    # The default request headers that are used to make HTTP requests to the
     # API. A user agent is provided as requested in the documentation.
     # @see https://haveibeenpwned.com/API/v2#UserAgent
-    DEFAULT_REQUEST_OPTIONS = {
+    DEFAULT_REQUEST_HEADERS = {
       "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}"
     }.freeze
 
@@ -40,21 +40,23 @@ module Pwned
     #
     # @example A simple password with the default request options
     #     password = Pwned::Password.new("password")
-    # @example Setting the user agent and the read timeout of the reques
-    #     password = Pwned::Password.new("password", "User-Agent" => "My user agent", :read_timout => 10)
+    # @example Setting the user agent and the read timeout of the request
+    #     password = Pwned::Password.new("password", headers: { "User-Agent" => "My user agent" }, read_timout: 10)
     #
     # @param password [String] The password you want to check against the API.
-    # @param [Hash] request_options Options that can be passed to +open+ when
+    # @param [Hash] request_options Options that can be passed to +Net::HTTP.start+ when
     #   calling the API
-    # @option request_options [String] 'User-Agent' ("Ruby Pwned::Password #{Pwned::VERSION}")
-    #   The user agent used when making an API request.
+    # @option request_options [Symbol] :headers ({ "User-Agent" => '"Ruby Pwned::Password #{Pwned::VERSION}" })
+    #   HTTP headers to include in the request
     # @return [Boolean] Whether the password appears in the data breaches or not.
     # @raise [TypeError] if the password is not a string.
     # @since 1.1.0
     def initialize(password, request_options={})
       raise TypeError, "password must be of type String" unless password.is_a? String
       @password = password
-      @request_options = DEFAULT_REQUEST_OPTIONS.merge(request_options)
+      @request_options = Hash(request_options).dup
+      @request_headers = Hash(request_options.delete(:headers))
+      @request_headers = DEFAULT_REQUEST_HEADERS.merge(@request_headers)
     end
 
     ##
@@ -93,6 +95,8 @@ module Pwned
 
     private
 
+    attr_reader :request_options, :request_headers
+
     def fetch_pwned_count
       for_each_response_line do |line|
         next unless line.start_with?(hashed_password_suffix)
@@ -106,7 +110,7 @@ module Pwned
 
     def for_each_response_line(&block)
       begin
-        with_http_response "#{API_URL}#{hashed_password_prefix}", @request_options do |response|
+        with_http_response "#{API_URL}#{hashed_password_prefix}" do |response|
           response.value # raise if request was unsuccessful
           stream_response_lines(response, &block)
         end
@@ -127,13 +131,14 @@ module Pwned
 
     # Make a HTTP GET request given the url and headers.
     # Yields a `Net::HTTPResponse`.
-    def with_http_response(url, headers, &block)
+    def with_http_response(url, &block)
       uri = URI(url)
 
       request = Net::HTTP::Get.new(uri)
-      request.initialize_http_header(headers)
+      request.initialize_http_header(request_headers)
+      request_options[:use_ssl] = true
 
-      Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+      Net::HTTP.start(uri.host, uri.port, request_options) do |http|
         http.request(request, &block)
       end
     end
