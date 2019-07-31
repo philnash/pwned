@@ -52,7 +52,7 @@ module Pwned
     # @raise [TypeError] if the password is not a string.
     # @since 1.1.0
     def initialize(password, request_options={})
-      raise TypeError, "password must be of type String" unless password.is_a? String
+      raise TypeError, "password must be of type String" unless password.instance_of? String
       @password = password
       @request_options = DEFAULT_REQUEST_OPTIONS.merge(request_options)
     end
@@ -97,7 +97,7 @@ module Pwned
       for_each_response_line do |line|
         next unless line.start_with?(hashed_password_suffix)
         # Count starts after the suffix, followed by a colon
-        return line[(SHA1_LENGTH-HASH_PREFIX_LENGTH+1)..-1].to_i
+        return Integer(line[(hashed_password_suffix.length+1)..-1])
       end
 
       # The hash was not found, we can assume the password is not pwned [yet]
@@ -110,9 +110,9 @@ module Pwned
           io.each_line(&block)
         end
       rescue Timeout::Error => e
-        raise Pwned::TimeoutError, e.message
+        raise TimeoutError, e
       rescue => e
-        raise Pwned::Error, e.message
+        raise Error, e
       end
     end
 

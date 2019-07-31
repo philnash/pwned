@@ -36,7 +36,7 @@ module Pwned
   # @return [Boolean] Whether the password appears in the data breaches or not.
   # @since 1.1.0
   def self.pwned?(password, request_options={})
-    Pwned::Password.new(password, request_options).pwned?
+    Password.new(password, request_options).pwned?
   end
 
   ##
@@ -55,6 +55,6 @@ module Pwned
   #   breaches.
   # @since 1.1.0
   def self.pwned_count(password, request_options={})
-    Pwned::Password.new(password, request_options).pwned_count
+    Password.new(password, request_options).pwned_count
   end
 end

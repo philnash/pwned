@@ -6,15 +6,15 @@ RSpec.describe Pwned::Password do
   end
 
   it "doesn't initialize with an integer" do
-    expect { Pwned::Password.new(123) }.to raise_error(TypeError)
+    expect { Pwned::Password.new(123) }.to raise_error(TypeError, "password must be of type String")
   end
 
   it "doesn't initialize with an array" do
-    expect { Pwned::Password.new(["hello", "world"]) }.to raise_error(TypeError)
+    expect { Pwned::Password.new(["hello", "world"]) }.to raise_error(TypeError, "password must be of type String")
   end
 
   it "doesn't initialize with a hash" do
-    expect { Pwned::Password.new({ a: "b", c: "d" }) }.to raise_error(TypeError)
+    expect { Pwned::Password.new({ a: "b", c: "d" }) }.to raise_error(TypeError, "password must be of type String")
   end
 
   it "has a hashed version of the password" do
@@ -41,6 +41,20 @@ RSpec.describe Pwned::Password do
     it "works with simplified accessors" do
       expect(Pwned.pwned?(password.password)).to be true
       expect(Pwned.pwned_count(password.password)).to eq(3303003)
+    end
+  end
+
+  describe "when pwned only once", pwned_range: "D1DB1" do
+    let(:password) { Pwned::Password.new("harlequin84") }
+
+    it "reports it is pwned" do
+      expect(password.pwned?).to be true
+      expect(@stub).to have_been_requested
+    end
+
+    it "reports it has been pwned many times" do
+      expect(password.pwned_count).to eq(1)
+      expect(@stub).to have_been_requested
     end
   end
 
@@ -140,6 +154,27 @@ RSpec.describe Pwned::Password do
       expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
         with(headers: { "User-Agent" => "Super fun user agent" })).
         to have_been_made.once
+    end
+
+    it "allows the user agent to be set from the simplified accessor" do
+      Pwned.pwned?("password", { "User-Agent" => "Super fun user agent" })
+      Pwned.pwned_count("password", { "User-Agent" => "Super fun user agent" })
+
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
+        with(headers: { "User-Agent" => "Super fun user agent" })).
+        to have_been_made.times(2)
+    end
+  end
+
+  describe "when making requests", pwned_range: "37D5B" do
+    let(:password) { Pwned::Password.new("t3hb3stpa55w0rd") }
+
+    it "doesn't leave files open" do
+      open_files = ObjectSpace.each_object(IO).select { |io| !io.closed? }.count
+      expect(password.pwned?).to be false
+      expect(@stub).to have_been_requested
+      now_open_files = ObjectSpace.each_object(IO).select { |io| !io.closed? }.count
+      expect(open_files).to be now_open_files
     end
   end
 end

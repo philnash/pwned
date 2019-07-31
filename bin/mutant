@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+bundle exec mutant --include lib --require pwned --use rspec -- "Pwned*"
