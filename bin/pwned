@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require 'pwned'
+require 'optparse'
+require 'io/console'
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = <<-USAGE
+Usage: pwned <password>
+
+Tests a password against the Pwned Passwords API using the k-anonymity model,
+which avoids sending the entire password to the service.opts
+
+If the password has been found in a publicly available breach then this tool
+will report how many times it has been seen. Otherwise the tool will report that
+the password has not been found in a public breach yet.
+
+USAGE
+
+  opts.version = Pwned::VERSION
+
+  opts.on("-s", "--secret", "Enter password without displaying characters.\n#{" "* 37}Overrides provided arguments.")
+  opts.on_tail("-h", "--help", "Show help.")
+  opts.on_tail("-v", "--version", "Show version number.\n\n")
+end
+
+parser.parse!(ARGV, into: options)
+
+if options[:help]
+  puts parser.help
+  exit
+end
+if options[:version]
+  puts parser.ver
+  exit
+end
+password_to_test = ARGV.first
+if options[:secret]
+  password_to_test = STDIN.getpass("Password: ")
+end
+if !password_to_test || password_to_test.strip == ""
+  puts parser.help
+  exit
+end
+password = Pwned::Password.new(password_to_test || ARGV.first)
+if password.pwned?
+  puts "Pwned!\nThe password has been found in public breaches #{password.pwned_count} times."
+else
+  puts "The password has not been found in a public breach."
+end
+

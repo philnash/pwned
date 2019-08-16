@@ -14,6 +14,7 @@ An easy, Ruby way to use the Pwned Passwords API.
   * [Plain Ruby](#plain-ruby)
   * [Rails (ActiveRecord)](#activerecord-validator)
   * [Devise](#devise)
+  * [Command line](#command-line)
 * [How Pwned is Pi?](#how-pwned-is-pi)
 * [Development](#development)
 * [Contributing](#contributing)
@@ -182,6 +183,24 @@ In addition to these options, HTTP headers can be specified with the `:headers` 
 ### Devise
 
 If you are using Devise I recommend you use the [devise-pwned_password extension](https://github.com/michaelbanfield/devise-pwned_password) which is now powered by this gem.
+
+### Command line
+
+The gem provides a command line utility for checking passwords. You can call it from your terminal application like this:
+
+```bash
+$ pwned password
+Pwned!
+The password has been found in public breaches 3645804 times.
+```
+
+If you don't want the password you are checking to be visible, call:
+
+```bash
+$ pwned --secret
+```
+
+You will be prompted for the password, but it won't be displayed.
 
 ## How Pwned is Pi?
 
