@@ -34,7 +34,7 @@ RSpec.describe NotPwnedValidator do
 
     it "allows the user agent to be set" do
       Model.validates :password, not_pwned: {
-        request_options: { "User-Agent" => "Super fun user agent" }
+        request_options: { headers: { "User-Agent" => "Super fun user agent" } }
       }
       model = create_model('password')
 

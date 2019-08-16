@@ -2,7 +2,22 @@
 
 ## Ongoing [☰](https://github.com/philnash/pwned/compare/v1.2.1...master)
 
-...
+* Major updates
+  * Switches from `open-uri` to `Net::HTTP`. This is a potentially breaking change.
+  * `request_options` are now used to configure `Net::HTTP.start`.
+  * Rather than using all string keys from `request_options`, HTTP headers are now
+    specified in their own `headers` hash. To upgrade, any options intended as
+    headers need to be extracted into a `headers` hash, e.g.
+
+    ```diff
+      validates :password, not_pwned: {
+    -    request_options: { read_timeout: 5, open_timeout: 1, "User-Agent" => "Super fun user agent" }
+    +    request_options: { read_timeout: 5, open_timeout: 1, headers: { "User-Agent" => "Super fun user agent" } }
+      }
+
+    -  password = Pwned::Password.new("password", 'User-Agent' => 'Super fun new user agent')
+    +  password = Pwned::Password.new("password", headers: { 'User-Agent' => 'Super fun new user agent' }, read_timeout: 10)
+    ```
 
 ## 1.2.1 (March 17, 2018) [☰](https://github.com/philnash/pwned/compare/v1.2.0...v1.2.1)
 
