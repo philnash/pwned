@@ -121,7 +121,7 @@ RSpec.describe Pwned::Password do
       aggregate_failures "testing custom error" do
         expect(error).to be_kind_of(Pwned::Error)
         expect(error.message).to match(/500/)
-        expect(error.cause).to be_kind_of(OpenURI::HTTPError)
+        expect(error.cause).to be_kind_of(Net::HTTPFatalError)
       end
     end
   end
@@ -142,7 +142,7 @@ RSpec.describe Pwned::Password do
       aggregate_failures "testing custom error" do
         expect(error).to be_kind_of(Pwned::Error)
         expect(error.message).to match(/404/)
-        expect(error.cause).to be_kind_of(OpenURI::HTTPError)
+        expect(error.cause).to be_kind_of(Net::HTTPServerException)
       end
     end
   end
@@ -157,7 +157,7 @@ RSpec.describe Pwned::Password do
     end
 
     it "allows the user agent to be set" do
-      password = Pwned::Password.new("password", { "User-Agent" => "Super fun user agent" })
+      password = Pwned::Password.new("password", headers: { "User-Agent" => "Super fun user agent" })
       password.pwned?
 
       expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
@@ -187,4 +187,15 @@ RSpec.describe Pwned::Password do
       expect(open_files).to be now_open_files
     end
   end
+
+  describe 'streaming', pwned_range: "A0F41" do
+    let(:password) { Pwned::Password.new("fake-password") }
+
+    # Since our streaming is yielding by line across chunks, ensure we're not
+    # missing lines by checking a single line file
+    it "streams the whole file" do
+      expect(password).to be_pwned
+    end
+  end
+
 end
