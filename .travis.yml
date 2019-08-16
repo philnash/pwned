@@ -23,3 +23,8 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - env: RAILS_VERSION=6.0.0.rc2
+  exclude:
+    - rvm: 2.4
+      env: RAILS_VERSION=6.0.0.rc2
+    - rvm: 2.3
+      env: RAILS_VERSION=6.0.0.rc2
