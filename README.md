@@ -97,10 +97,11 @@ Pwned.pwned_count("password")
 
 #### Advanced
 
-You can set options and headers to be used with `open-uri` when making the request to the API. HTTP headers must be string keys and the [other options are available in the `OpenURI::OpenRead` module](https://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open).
+You can set http request options to be used with `Net::HTTP.start` when making the request to the API. These options are
+documented in the [`Net::HTTP.start` documentation](http://ruby-doc.org/stdlib-2.6.3/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start). The `:headers` option defines defines HTTP headers. These headers must be string keys.
 
 ```ruby
-password = Pwned::Password.new("password", { 'User-Agent' => 'Super fun new user agent' })
+password = Pwned::Password.new("password", headers: { 'User-Agent' => 'Super fun new user agent' }, read_timeout: 10)
 ```
 
 ### ActiveRecord Validator
@@ -170,11 +171,12 @@ end
 
 #### Custom Request Options
 
-You can configure network requests made from the validator using `:request_options` (see [OpenURI::OpenRead#open](http://ruby-doc.org/stdlib-2.5.0/libdoc/open-uri/rdoc/OpenURI/OpenRead.html#method-i-open) for the list of available options, string keys represent custom network request headers, e.g. `"User-Agent"`):
+You can configure network requests made from the validator using `:request_options` (see [Net::HTTP.start](http://ruby-doc.org/stdlib-2.6.3/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start) for the list of available options).
+In addition to these options, HTTP headers can be specified with the `:headers` key, e.g. `"User-Agent"`):
 
 ```ruby
   validates :password, not_pwned: {
-    request_options: { read_timeout: 5, open_timeout: 1, "User-Agent" => "Super fun user agent" }
+    request_options: { read_timeout: 5, open_timeout: 1, headers: { "User-Agent" => "Super fun user agent" } }
   }
 ```
 
