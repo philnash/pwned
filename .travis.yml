@@ -18,6 +18,8 @@ rvm:
 
 before_install: gem install bundler
 
+script: ./bin/test
+
 matrix:
   allow_failures:
     - rvm: ruby-head

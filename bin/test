@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+if RUBY_VERSION.start_with?("2.5.")
+  exec('bundle exec rspec && bundle exec ./bin/mutant')
+else
+  exec('bundle exec rspec')
+end
