@@ -166,8 +166,8 @@ RSpec.describe Pwned::Password do
     end
 
     it "allows the user agent to be set from the simplified accessor" do
-      Pwned.pwned?("password", { "User-Agent" => "Super fun user agent" })
-      Pwned.pwned_count("password", { "User-Agent" => "Super fun user agent" })
+      Pwned.pwned?("password", { headers: { "User-Agent" => "Super fun user agent" }})
+      Pwned.pwned_count("password", { headers: { "User-Agent" => "Super fun user agent" }})
 
       expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
         with(headers: { "User-Agent" => "Super fun user agent" })).
