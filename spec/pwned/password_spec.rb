@@ -37,10 +37,19 @@ RSpec.describe Pwned::Password do
       expect(password.pwned?).to be true
       expect(@stub).to have_been_requested
     end
+  end
 
-    it "works with simplified accessors" do
-      expect(Pwned.pwned?(password.password)).to be true
-      expect(Pwned.pwned_count(password.password)).to eq(3303003)
+  describe "with simple accessors", pwned_range: "5BAA6" do
+    let(:password_string) { "password" }
+
+    it "works with simplified pwned accessor" do
+      expect(Pwned.pwned?(password_string)).to be true
+      expect(@stub).to have_been_requested
+    end
+
+    it "works with simplified pwned_count accessor" do
+      expect(Pwned.pwned_count(password_string)).to eq(3303003)
+      expect(@stub).to have_been_requested
     end
   end
 
@@ -170,6 +179,7 @@ RSpec.describe Pwned::Password do
     let(:password) { Pwned::Password.new("t3hb3stpa55w0rd") }
 
     it "doesn't leave files open" do
+      skip("ObjectSpace is disabled in JRuby") if defined? JRUBY_VERSION
       open_files = ObjectSpace.each_object(IO).select { |io| !io.closed? }.count
       expect(password.pwned?).to be false
       expect(@stub).to have_been_requested
