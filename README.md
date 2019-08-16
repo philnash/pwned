@@ -8,17 +8,17 @@ An easy, Ruby way to use the Pwned Passwords API.
 
 ## Table of Contents
 
-* [About](#about)
-* [Installation](#installation)
-* [Usage](#usage)
-  * [Plain Ruby](#plain-ruby)
-  * [Rails (ActiveRecord)](#activerecord-validator)
-  * [Devise](#devise)
-* [How Pwned is Pi?](#how-pwned-is-pi)
-* [Development](#development)
-* [Contributing](#contributing)
-* [License](#license)
-* [Code of Conduct](#code-of-conduct)
+- [About](#about)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Plain Ruby](#plain-ruby)
+  - [Rails (ActiveRecord)](#activerecord-validator)
+  - [Devise](#devise)
+- [How Pwned is Pi?](#how-pwned-is-pi)
+- [Development](#development)
+- [Contributing](#contributing)
+- [License](#license)
+- [Code of Conduct](#code-of-conduct)
 
 ## About
 
@@ -251,6 +251,10 @@ The results may, or may not, surprise you.
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+### Testing
+
+Unit testing is provided by `rspec` and [`mutant`](https://github.com/mbj/mutant) is included for running mutation tests. Mutation tests are not run in CI because they appear to be too flaky to do good in continuous integration. To run the mutant tests, run `bundle exec ./bin/mutant`.
 
 ## Contributing
 
