@@ -7,7 +7,7 @@ env:
     - RAILS_VERSION=5.0.7.2
     - RAILS_VERSION=5.1.7
     - RAILS_VERSION=5.2.3
-    - RAILS_VERSION=6.0.0.rc2
+    - RAILS_VERSION=6.0.0
 
 rvm:
   - 2.6
@@ -22,9 +22,8 @@ before_install: gem install bundler
 matrix:
   allow_failures:
     - rvm: ruby-head
-    - env: RAILS_VERSION=6.0.0.rc2
   exclude:
     - rvm: 2.4
-      env: RAILS_VERSION=6.0.0.rc2
+      env: RAILS_VERSION=6.0.0
     - rvm: 2.3
-      env: RAILS_VERSION=6.0.0.rc2
+      env: RAILS_VERSION=6.0.0
