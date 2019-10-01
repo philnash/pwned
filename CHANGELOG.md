@@ -2,6 +2,8 @@
 
 ## Ongoing [☰](https://github.com/philnash/pwned/compare/v1.2.1...master)
 
+## 2.0.0 (October 1, 2019) [☰](https://github.com/philnash/pwned/compare/v1.2.1...v2.0.0)
+
 - Major updates
 
   - Switches from `open-uri` to `Net::HTTP`. This is a potentially breaking change.
