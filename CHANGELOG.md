@@ -1,6 +1,13 @@
 # Changelog for `Pwned`
 
-## Ongoing [☰](https://github.com/philnash/pwned/compare/v1.2.1...master)
+## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.0.1...master)
+
+## 2.0.1 (January 14, 2019) [☰](https://github.com/philnash/pwned/compare/v2.0.0...v2.0.1)
+
+- Minor updates
+
+  - Adds double-splat to ActiveModel::Errors#add calls with options to make Ruby 2.7 happy.
+  - Detects presence of Net::HTTPClientException in tests to remove deprecation warning.
 
 ## 2.0.0 (October 1, 2019) [☰](https://github.com/philnash/pwned/compare/v1.2.1...v2.0.0)
 
