@@ -119,7 +119,14 @@ RSpec.describe Pwned::Password do
       aggregate_failures "testing custom error" do
         expect(error).to be_kind_of(Pwned::Error)
         expect(error.message).to match(/404/)
-        expect(error.cause).to be_kind_of(Net::HTTPServerException)
+        if Object.const_defined?('Net::HTTPClientException')
+          # Net::HTTPServerException is deprecated in favour of
+          # Net::HTTPClientException. More detail here:
+          # https://bugs.ruby-lang.org/issues/14688
+          expect(error.cause).to be_kind_of(Net::HTTPClientException)
+        else
+          expect(error.cause).to be_kind_of(Net::HTTPServerException)
+        end
       end
     end
   end
