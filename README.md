@@ -6,13 +6,16 @@ An easy, Ruby way to use the Pwned Passwords API.
 
 [API docs](https://philnash.github.io/pwned/) | [GitHub repo](https://github.com/philnash/pwned)
 
-## Table of Contents
-
 * [About](#about)
 * [Installation](#installation)
 * [Usage](#usage)
   * [Plain Ruby](#plain-ruby)
-  * [Rails (ActiveRecord)](#activerecord-validator)
+    * [Advanced](#advanced)
+  * [ActiveRecord Validator](#activerecord-validator)
+    * [I18n](#i18n)
+    * [Threshold](#threshold)
+    * [Network Error Handling](#network-error-handling)
+    * [Custom Request Options](#custom-request-options)
   * [Devise](#devise)
   * [Command line](#command-line)
 * [How Pwned is Pi?](#how-pwned-is-pi)
@@ -172,13 +175,22 @@ end
 #### Custom Request Options
 
 You can configure network requests made from the validator using `:request_options` (see [Net::HTTP.start](http://ruby-doc.org/stdlib-2.6.3/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start) for the list of available options).
-In addition to these options, HTTP headers can be specified with the `:headers` key, e.g. `"User-Agent"`):
+In addition to these options, HTTP headers can be specified with the `:headers` key, e.g. `"User-Agent"`, `"Add-Padding"`:
 
 ```ruby
   validates :password, not_pwned: {
-    request_options: { read_timeout: 5, open_timeout: 1, headers: { "User-Agent" => "Super fun user agent" } }
+    request_options: {
+      read_timeout: 5,
+      open_timeout: 1,
+      headers: {
+        "User-Agent" => "Super fun user agent",
+        "Add-Padding" => "true"
+      }
+    }
   }
 ```
+
+You can read about [what `"Add-Padding"` does and why you might want it in Troy Hunt's blog post on the subject](https://www.troyhunt.com/enhancing-pwned-passwords-privacy-with-padding/).
 
 ### Devise
 

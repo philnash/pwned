@@ -2,6 +2,10 @@
 
 ## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.0.1...master)
 
+- Minor updates
+  - Ensures the `"Add-Padding"` header is respected and doesn't fail in the case of a padding clash with zero results (https://www.troyhunt.com/enhancing-pwned-passwords-privacy-with-padding/).
+  - Uses `File.join` in tests instead of string manipulation
+
 ## 2.0.1 (January 14, 2019) [☰](https://github.com/philnash/pwned/compare/v2.0.0...v2.0.1)
 
 - Minor updates

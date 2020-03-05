@@ -148,6 +148,18 @@ RSpec.describe Pwned::Password do
         with(headers: { "User-Agent" => "Super fun user agent" })).
         to have_been_made.once
     end
+
+    it "returns not pwned even if the suffix appears with 0 results" do
+      password = Pwned::Password.new("h444x000r", headers: { "Add-Padding" => "true" })
+
+      response = File.open(File.expand_path(File.join("..", "fixtures", "9A3BA.txt"), __dir__))
+      stub_request(:get, "https://api.pwnedpasswords.com/range/9A3BA").
+        with(headers: { "Add-Padding" => "true" }).
+        to_return(body: response)
+
+      expect(password.pwned?).to be false
+      expect(password.pwned_count).to eq 0
+    end
   end
 
   describe 'streaming', pwned_range: "A0F41" do

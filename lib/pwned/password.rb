@@ -103,7 +103,6 @@ module Pwned
         # Count starts after the suffix, followed by a colon
         return line[(SHA1_LENGTH-HASH_PREFIX_LENGTH+1)..-1].to_i
       end
-
       # The hash was not found, we can assume the password is not pwned [yet]
       0
     end
