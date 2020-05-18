@@ -148,7 +148,7 @@ module Pwned
       last_line = ''
 
       response.read_body do |chunk|
-        chunk_lines = (last_line + chunk).lines
+        chunk_lines = (last_line.to_s + chunk).lines
         # This could end with half a line, so save it for next time
         last_line = chunk_lines.pop
         chunk_lines.each(&block)
