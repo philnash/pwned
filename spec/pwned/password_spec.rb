@@ -158,6 +158,18 @@ RSpec.describe Pwned::Password do
     it "streams the whole file" do
       expect(password).to be_pwned
     end
+
+    it "works when response stream returns several empty chunks" do
+      response = double
+      allow(response).to receive(:read_body).
+        and_yield("").
+        and_yield("").
+        and_yield("hello\nworld\n")
+
+      password.send(:stream_response_lines, response) do |x|
+        expect(x).to eq("hello\n") | eq("world\n")
+      end
+    end
   end
 
 end
