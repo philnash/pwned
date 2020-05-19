@@ -145,7 +145,7 @@ module Pwned
 
     # Stream a Net::HTTPResponse by line, handling lines that cross chunks.
     def stream_response_lines(response, &block)
-      last_line = ''
+      last_line = nil
 
       response.read_body do |chunk|
         chunk_lines = (last_line.to_s + chunk).lines
@@ -153,7 +153,8 @@ module Pwned
         last_line = chunk_lines.pop
         chunk_lines.each(&block)
       end
-      yield last_line
+
+      yield last_line if last_line
     end
 
   end
