@@ -1,6 +1,14 @@
 # Changelog for `Pwned`
 
-## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.0.1...master)
+## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.0.2...master)
+
+## 2.0.2 (May 20, 2020) [☰](https://github.com/philnash/pwned/compare/v2.0.1...v2.0.2)
+
+- Minor fix
+
+  - It was found to be possible for reading the lines body of a response to
+    result in a `nil` which caused trouble with string concatenation. This
+    avoids that scenario. Fixes #18, thanks [@flori](https://github.com/flori).
 
 ## 2.0.1 (January 14, 2019) [☰](https://github.com/philnash/pwned/compare/v2.0.0...v2.0.1)
 

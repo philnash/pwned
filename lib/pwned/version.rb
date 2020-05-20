@@ -3,5 +3,5 @@
 module Pwned
   ##
   # The current version of the +pwned+ gem.
-  VERSION = "2.0.1"
+  VERSION = "2.0.2"
 end
