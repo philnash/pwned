@@ -10,7 +10,7 @@
     result in a `nil` which caused trouble with string concatenation. This
     avoids that scenario. Fixes #18, thanks [@flori](https://github.com/flori).
 
-## 2.0.1 (January 14, 2019) [☰](https://github.com/philnash/pwned/compare/v2.0.0...v2.0.1)
+## 2.0.1 (January 14, 2020) [☰](https://github.com/philnash/pwned/compare/v2.0.0...v2.0.1)
 
 - Minor updates
 
