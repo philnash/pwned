@@ -149,11 +149,14 @@ module Pwned
 
       response.read_body do |chunk|
         chunk_lines = (last_line + chunk).lines
-        # This could end with half a line, so save it for next time
-        last_line = chunk_lines.pop
+        # This could end with half a line, so save it for next time. If
+        # chunk_lines is empty, pop returns nil, so this also ensures last_line
+        # is always a string.
+        last_line = chunk_lines.pop || ''
         chunk_lines.each(&block)
       end
-      yield last_line
+
+      yield last_line unless last_line.empty?
     end
 
   end
