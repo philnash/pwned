@@ -166,9 +166,17 @@ RSpec.describe Pwned::Password do
         and_yield("").
         and_yield("hello\nworld\n")
 
-      password.send(:stream_response_lines, response) do |x|
-        expect(x).to eq("hello\n") | eq("world\n")
+      password.send(:stream_response_lines, response) do |line|
+        expect(line).to eq("hello\n") | eq("world\n")
       end
+    end
+  end
+
+  describe "empty response", pwned_range: "AD871" do
+    let(:password) { Pwned::Password.new("empty") }
+
+    it "is not pwned" do
+      expect(password).not_to be_pwned
     end
   end
 

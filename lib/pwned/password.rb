@@ -145,16 +145,18 @@ module Pwned
 
     # Stream a Net::HTTPResponse by line, handling lines that cross chunks.
     def stream_response_lines(response, &block)
-      last_line = nil
+      last_line = ''
 
       response.read_body do |chunk|
-        chunk_lines = (last_line.to_s + chunk).lines
-        # This could end with half a line, so save it for next time
-        last_line = chunk_lines.pop
+        chunk_lines = (last_line + chunk).lines
+        # This could end with half a line, so save it for next time. If
+        # chunk_lines is empty, pop returns nil, so this also ensures last_line
+        # is always a string.
+        last_line = chunk_lines.pop || ''
         chunk_lines.each(&block)
       end
 
-      yield last_line if last_line
+      yield last_line unless last_line.empty?
     end
 
   end
