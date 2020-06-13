@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.metadata      = {
     "bug_tracker_uri"   => "https://github.com/philnash/pwned/issues",
     "change_log_uri"    => "https://github.com/philnash/pwned/blob/master/CHANGELOG.md",
-    "documentation_uri" => "https://philnash.github.io/pwned/",
+    "documentation_uri" => "https://www.rubydoc.info/gems/pwned",
     "homepage_uri"      => "https://github.com/philnash/pwned",
     "source_code_uri"   => "https://github.com/philnash/pwned"
   }
