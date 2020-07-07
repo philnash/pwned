@@ -20,6 +20,7 @@ An easy, Ruby way to use the Pwned Passwords API.
       - [Threshold](#threshold)
       - [Network Error Handling](#network-error-handling)
       - [Custom Request Options](#custom-request-options)
+    - [Using Asynchronously](#using-asynchronously)
     - [Devise](#devise)
     - [Command line](#command-line)
   - [How Pwned is Pi?](#how-pwned-is-pi)
@@ -185,6 +186,17 @@ In addition to these options, HTTP headers can be specified with the `:headers` 
   validates :password, not_pwned: {
     request_options: { read_timeout: 5, open_timeout: 1, headers: { "User-Agent" => "Super fun user agent" } }
   }
+```
+
+### Using Asynchronously
+
+You may have a use case for hashing the password in advance, and then making the call to the Pwned api later
+(for example if you want to enqueue a job without storing the plaintext password):
+
+```ruby
+hashed_password = Pwned.hash_password(password)
+# some time later
+Pwned::HashPassword.new(hashed_password, request_options).pwned?
 ```
 
 ### Devise

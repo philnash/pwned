@@ -4,6 +4,7 @@ require "digest"
 require "pwned/version"
 require "pwned/error"
 require "pwned/password"
+require "pwned/hashed_password"
 
 begin
   # Load Rails and our custom validator
