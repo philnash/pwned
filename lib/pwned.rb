@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "digest"
 require "pwned/version"
 require "pwned/error"
 require "pwned/password"
@@ -56,5 +57,18 @@ module Pwned
   # @since 1.1.0
   def self.pwned_count(password, request_options={})
     Pwned::Password.new(password, request_options).pwned_count
+  end
+
+  ##
+  # Returns the full SHA1 hash of the given password in uppercase. This can be safely passed around your code
+  # before making the pwned request (e.g. dropped into a queue table).
+  #
+  # @example
+  #     Pwned.hash_password("password") #=> 5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8
+  #
+  # @param password [String] The password you want to check against the API.
+  # @since TBC
+  def self.hash_password(password)
+    Digest::SHA1.hexdigest(password).upcase
   end
 end
