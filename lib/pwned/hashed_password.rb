@@ -26,7 +26,7 @@ module Pwned
     # @since 1.1.0
     def initialize(hashed_password, request_options={})
       raise TypeError, "hashed_password must be of type String" unless hashed_password.is_a? String
-      @hashed_password = hashed_password
+      @hashed_password = hashed_password.upcase
       @request_options = Hash(request_options).dup
       @request_headers = Hash(request_options.delete(:headers))
       @request_headers = DEFAULT_REQUEST_HEADERS.merge(@request_headers)
