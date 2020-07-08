@@ -8,7 +8,7 @@ RSpec.describe Pwned::HashedPassword do
     expect(hashed_password.hashed_password).to eq("5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8")
   end
 
-  context "when given an integer" do
+  describe "when given an integer" do
     let(:password_hash) { 123 }
 
     it "doesn't initialize" do
@@ -16,7 +16,7 @@ RSpec.describe Pwned::HashedPassword do
     end
   end
 
-  context "when given an array" do
+  describe "when given an array" do
     let(:password_hash) { ["hello", "world"] }
 
     it "doesn't initialize" do
@@ -24,7 +24,7 @@ RSpec.describe Pwned::HashedPassword do
     end
   end
 
-  context "when given a hash" do
+  describe "when given a hash" do
     let(:password_hash) { { a: "b", c: "d" } }
 
     it "doesn't initialize" do
