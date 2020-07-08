@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
-require 'pwned/password_base'
+require "pwned/password_base"
 
 module Pwned
   ##
   # This class represents a password. It does all the work of talking to the
   # Pwned Passwords API to find out if the password has been pwned.
   # @see https://haveibeenpwned.com/API/v2#PwnedPasswords
-  class Password < PasswordBase
+  class Password
+    include PasswordBase
     ##
     # @return [String] the password that is being checked.
     # @since 1.0.0
@@ -24,7 +25,7 @@ module Pwned
     # @param password [String] The password you want to check against the API.
     # @param [Hash] request_options Options that can be passed to +Net::HTTP.start+ when
     #   calling the API
-    # @option request_options [Symbol] :headers ({ "User-Agent" => '"Ruby Pwned::Password #{Pwned::VERSION}" })
+    # @option request_options [Symbol] :headers ({ "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })
     #   HTTP headers to include in the request
     # @return [Boolean] Whether the password appears in the data breaches or not.
     # @raise [TypeError] if the password is not a string.

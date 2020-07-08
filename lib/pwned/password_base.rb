@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require "digest"
-require 'net/http'
+require "net/http"
 
 module Pwned
   ##
   # This class represents a password. It does all the work of talking to the
   # Pwned Passwords API to find out if the password has been pwned.
   # @see https://haveibeenpwned.com/API/v2#PwnedPasswords
-  class PasswordBase
+  module PasswordBase
     ##
     # The base URL for the Pwned Passwords API
     API_URL = "https://api.pwnedpasswords.com/range/"
@@ -115,14 +115,14 @@ module Pwned
 
     # Stream a Net::HTTPResponse by line, handling lines that cross chunks.
     def stream_response_lines(response, &block)
-      last_line = ''
+      last_line = ""
 
       response.read_body do |chunk|
         chunk_lines = (last_line + chunk).lines
         # This could end with half a line, so save it for next time. If
         # chunk_lines is empty, pop returns nil, so this also ensures last_line
         # is always a string.
-        last_line = chunk_lines.pop || ''
+        last_line = chunk_lines.pop || ""
         chunk_lines.each(&block)
       end
 
