@@ -33,7 +33,7 @@ module Pwned
   # @param password [String] The password you want to check against the API.
   # @param [Hash] request_options Options that can be passed to +Net::HTTP.start+ when
   #   calling the API
-  # @option request_options [Symbol] :headers ({ "User-Agent" => '"Ruby Pwned::Password #{Pwned::VERSION}" })
+  # @option request_options [Symbol] :headers ({ "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })
   #   HTTP headers to include in the request
   # @return [Boolean] Whether the password appears in the data breaches or not.
   # @since 1.1.0
@@ -51,7 +51,7 @@ module Pwned
   # @param password [String] The password you want to check against the API.
   # @param [Hash] request_options Options that can be passed to +Net::HTTP.start+ when
   #   calling the API
-  # @option request_options [Symbol] :headers ({ "User-Agent" => '"Ruby Pwned::Password #{Pwned::VERSION}" })
+  # @option request_options [Symbol] :headers ({ "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })
   #   HTTP headers to include in the request
   # @return [Integer] The number of times the password has appeared in the data
   #   breaches.

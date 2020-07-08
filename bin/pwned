@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require 'pwned'
-require 'optparse'
-require 'io/console'
+require "pwned"
+require "optparse"
+require "io/console"
 
 options = {}
 parser = OptionParser.new do |opts|

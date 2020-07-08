@@ -119,7 +119,7 @@ RSpec.describe Pwned::Password do
       aggregate_failures "testing custom error" do
         expect(error).to be_kind_of(Pwned::Error)
         expect(error.message).to match(/404/)
-        if Object.const_defined?('Net::HTTPClientException')
+        if Object.const_defined?("Net::HTTPClientException")
           # Net::HTTPServerException is deprecated in favour of
           # Net::HTTPClientException. More detail here:
           # https://bugs.ruby-lang.org/issues/14688
@@ -150,7 +150,7 @@ RSpec.describe Pwned::Password do
     end
   end
 
-  describe 'streaming', pwned_range: "A0F41" do
+  describe "streaming", pwned_range: "A0F41" do
     let(:password) { Pwned::Password.new("fake-password") }
 
     # Since our streaming is yielding by line across chunks, ensure we're not
