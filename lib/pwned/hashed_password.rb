@@ -23,7 +23,7 @@ module Pwned
     # @option request_options [Symbol] :headers ({ "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })
     #   HTTP headers to include in the request
     # @raise [TypeError] if the password is not a string.
-    # @since 1.1.0
+    # @since 2.1.0
     def initialize(hashed_password, request_options={})
       raise TypeError, "hashed_password must be of type String" unless hashed_password.is_a? String
       @hashed_password = hashed_password.upcase

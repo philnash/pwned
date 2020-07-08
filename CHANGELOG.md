@@ -2,6 +2,14 @@
 
 ## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.0.2...master)
 
+## 2.1.0 (July 8, 2020) [☰](https://github.com/philnash/pwned/compare/v2.0.2...v2.1.0)
+
+- Minor updates
+
+  - Adds `Pwned::HashedPassword` class which is initializd with a SHA1 hash to
+    query the API with so that the lookup can be done in the background without
+    storing passwords. Fixes #19, thanks [@paprikati](https://github.com/paprikati).
+
 ## 2.0.2 (May 20, 2020) [☰](https://github.com/philnash/pwned/compare/v2.0.1...v2.0.2)
 
 - Minor fix

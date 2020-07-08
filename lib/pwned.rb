@@ -67,8 +67,9 @@ module Pwned
   # @example
   #     Pwned.hash_password("password") #=> 5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8
   #
-  # @param password [String] The password you want to check against the API.
-  # @since TBC
+  # @param password [String] The password you want to check against the API
+  # @return [String] An uppercase SHA1 hash of the password
+  # @since 2.1.0
   def self.hash_password(password)
     Digest::SHA1.hexdigest(password).upcase
   end
