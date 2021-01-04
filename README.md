@@ -2,32 +2,31 @@
 
 An easy, Ruby way to use the Pwned Passwords API.
 
-[![Gem Version](https://badge.fury.io/rb/pwned.svg)](https://rubygems.org/gems/pwned) [![Build Status](https://travis-ci.org/philnash/pwned.svg?branch=master)](https://travis-ci.org/philnash/pwned) [![Maintainability](https://codeclimate.com/github/philnash/pwned/badges/gpa.svg)](https://codeclimate.com/github/philnash/pwned/maintainability) [![Inline docs](https://inch-ci.org/github/philnash/pwned.svg?branch=master)](https://inch-ci.org/github/philnash/pwned)
+[![Gem Version](https://badge.fury.io/rb/pwned.svg)](https://rubygems.org/gems/pwned) [![Build Status](https://github.com/philnash/pwned/workflows/tests/badge.svg) [![Maintainability](https://codeclimate.com/github/philnash/pwned/badges/gpa.svg)](https://codeclimate.com/github/philnash/pwned/maintainability) [![Inline docs](https://inch-ci.org/github/philnash/pwned.svg?branch=master)](https://inch-ci.org/github/philnash/pwned)
 
 [API docs](https://www.rubydoc.info/gems/pwned) | [GitHub repo](https://github.com/philnash/pwned)
 
 ## Table of Contents
 
-- [Pwned](#pwned)
-  - [Table of Contents](#table-of-contents)
-  - [About](#about)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [Plain Ruby](#plain-ruby)
-      - [Advanced](#advanced)
-    - [ActiveRecord Validator](#activerecord-validator)
-      - [I18n](#i18n)
-      - [Threshold](#threshold)
-      - [Network Error Handling](#network-error-handling)
-      - [Custom Request Options](#custom-request-options)
-    - [Using Asynchronously](#using-asynchronously)
-    - [Devise](#devise)
-    - [Command line](#command-line)
-  - [How Pwned is Pi?](#how-pwned-is-pi)
-  - [Development](#development)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Code of Conduct](#code-of-conduct)
+* [Table of Contents](#table-of-contents)
+* [About](#about)
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Plain Ruby](#plain-ruby)
+    * [Advanced](#advanced)
+  * [ActiveRecord Validator](#activerecord-validator)
+    * [I18n](#i18n)
+    * [Threshold](#threshold)
+    * [Network Error Handling](#network-error-handling)
+    * [Custom Request Options](#custom-request-options)
+  * [Using Asynchronously](#using-asynchronously)
+  * [Devise](#devise)
+  * [Command line](#command-line)
+* [How Pwned is Pi?](#how-pwned-is-pi)
+* [Development](#development)
+* [Contributing](#contributing)
+* [License](#license)
+* [Code of Conduct](#code-of-conduct)
 
 ## About
 
