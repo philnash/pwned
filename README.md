@@ -2,7 +2,7 @@
 
 An easy, Ruby way to use the Pwned Passwords API.
 
-[![Gem Version](https://badge.fury.io/rb/pwned.svg)](https://rubygems.org/gems/pwned) [![Build Status](https://github.com/philnash/pwned/workflows/tests/badge.svg) [![Maintainability](https://codeclimate.com/github/philnash/pwned/badges/gpa.svg)](https://codeclimate.com/github/philnash/pwned/maintainability) [![Inline docs](https://inch-ci.org/github/philnash/pwned.svg?branch=master)](https://inch-ci.org/github/philnash/pwned)
+[![Gem Version](https://badge.fury.io/rb/pwned.svg)](https://rubygems.org/gems/pwned) ![Build Status](https://github.com/philnash/pwned/workflows/tests/badge.svg) [![Maintainability](https://codeclimate.com/github/philnash/pwned/badges/gpa.svg)](https://codeclimate.com/github/philnash/pwned/maintainability) [![Inline docs](https://inch-ci.org/github/philnash/pwned.svg?branch=master)](https://inch-ci.org/github/philnash/pwned)
 
 [API docs](https://www.rubydoc.info/gems/pwned) | [GitHub repo](https://github.com/philnash/pwned)
 
