@@ -1,0 +1,24 @@
+name: tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [2.5, 2.6, 2.7, 3.0, head]
+        rails: [4.2.11.3, 5.0.7.2, 5.1.7, 5.2.4.4, 6.0.3.4, 6.1.0]
+    env:
+      RAILS_VERSION: ${{ matrix.rails }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby ${{ matrix.ruby }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: "Install dependencies (rails: ${{matrix.rails}})"
+        run: bundle install
+      - name: Run tests
+        run: bundle exec rspec
