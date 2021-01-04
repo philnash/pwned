@@ -10,6 +10,15 @@ jobs:
       matrix:
         ruby: [2.5, 2.6, 2.7, 3.0, head]
         rails: [4.2.11.3, 5.0.7.2, 5.1.7, 5.2.4.4, 6.0.3.4, 6.1.0]
+        exclude:
+          # Ruby 3.0 and Rails 5 do not get along together.
+          - ruby: 3.0
+            rails: 5.0.7.2
+          - ruby: 3.0
+            rails: 5.1.7
+          - ruby: 3.0
+            rails: 5.2.4.4
+    continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
     env:
       RAILS_VERSION: ${{ matrix.rails }}
     steps:
