@@ -8,25 +8,28 @@ An easy, Ruby way to use the Pwned Passwords API.
 
 ## Table of Contents
 
-* [Table of Contents](#table-of-contents)
-* [About](#about)
-* [Installation](#installation)
-* [Usage](#usage)
-  * [Plain Ruby](#plain-ruby)
-    * [Advanced](#advanced)
-  * [ActiveRecord Validator](#activerecord-validator)
-    * [I18n](#i18n)
-    * [Threshold](#threshold)
-    * [Network Error Handling](#network-error-handling)
-    * [Custom Request Options](#custom-request-options)
-  * [Using Asynchronously](#using-asynchronously)
-  * [Devise](#devise)
-  * [Command line](#command-line)
-* [How Pwned is Pi?](#how-pwned-is-pi)
-* [Development](#development)
-* [Contributing](#contributing)
-* [License](#license)
-* [Code of Conduct](#code-of-conduct)
+- [Pwned](#pwned)
+  - [Table of Contents](#table-of-contents)
+  - [About](#about)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Plain Ruby](#plain-ruby)
+      - [Advanced](#advanced)
+    - [ActiveRecord Validator](#activerecord-validator)
+      - [I18n](#i18n)
+      - [Threshold](#threshold)
+      - [Network Error Handling](#network-error-handling)
+      - [Custom Request Options](#custom-request-options)
+    - [Using Asynchronously](#using-asynchronously)
+    - [Devise](#devise)
+    - [Rodauth](#rodauth)
+    - [Command line](#command-line)
+    - [Unpwn](#unpwn)
+  - [How Pwned is Pi?](#how-pwned-is-pi)
+  - [Development](#development)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Code of Conduct](#code-of-conduct)
 
 ## About
 
@@ -189,8 +192,7 @@ In addition to these options, HTTP headers can be specified with the `:headers` 
 
 ### Using Asynchronously
 
-You may have a use case for hashing the password in advance, and then making the call to the Pwned api later
-(for example if you want to enqueue a job without storing the plaintext password):
+You may have a use case for hashing the password in advance, and then making the call to the Pwned Passwords API later (for example if you want to enqueue a job without storing the plaintext password). To do this, you can hash the password with the `Pwned.hash_password` method and then initialize the `Pwned::HashPassword` class with the hash, like this:
 
 ```ruby
 hashed_password = Pwned.hash_password(password)
@@ -200,7 +202,11 @@ Pwned::HashPassword.new(hashed_password, request_options).pwned?
 
 ### Devise
 
-If you are using Devise I recommend you use the [devise-pwned_password extension](https://github.com/michaelbanfield/devise-pwned_password) which is now powered by this gem.
+If you are using [Devise](https://github.com/heartcombo/devise) I recommend you use the [devise-pwned_password extension](https://github.com/michaelbanfield/devise-pwned_password) which is now powered by this gem.
+
+### Rodauth
+
+If you are using [Rodauth](https://github.com/jeremyevans/rodauth) then you can use the [rodauth-pwned](https://github.com/janko/rodauth-pwned) feature which is powered by this gem.
 
 ### Command line
 
@@ -219,6 +225,10 @@ $ pwned --secret
 ```
 
 You will be prompted for the password, but it won't be displayed.
+
+### Unpwn
+
+To cut down on unnecessary network requests, [the unpwn project](https://github.com/indirect/unpwn) uses a list of the top one million passwords to check passwords against. Only if a password is not included in the top million is it then checked against the Pwned Passwords API.
 
 ## How Pwned is Pi?
 
