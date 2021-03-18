@@ -148,6 +148,23 @@ RSpec.describe Pwned::Password do
         with(headers: { "User-Agent" => "Super fun user agent" })).
         to have_been_made.once
     end
+
+    it "allows the proxy to be set" do
+      proxy = "https://username:password@example.com:12345"
+
+      # Webmock doesn't support proxy assertions (https://github.com/bblimke/webmock/issues/753)
+      # so we check that Net::HTTP receives the correct arguments.
+      expect(Net::HTTP).to receive(:start).
+        with("api.pwnedpasswords.com", 443, "example.com", 12345, "username", "password", anything).
+        and_call_original
+
+      password = Pwned::Password.new("password", proxy: proxy)
+      password.pwned?
+
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
+        with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })).
+        to have_been_made.once
+    end
   end
 
   describe "streaming", pwned_range: "A0F41" do
