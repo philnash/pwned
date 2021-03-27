@@ -18,6 +18,12 @@ jobs:
             rails: 5.1.7
           - ruby: 3.0
             rails: 5.2.4.4
+          - ruby: head
+            rails: 5.0.7.2
+          - ruby: head
+            rails: 5.1.7
+          - ruby: head
+            rails: 5.2.4.4
     continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
     env:
       RAILS_VERSION: ${{ matrix.rails }}
