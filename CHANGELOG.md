@@ -2,6 +2,13 @@
 
 ## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.0.2...master)
 
+## 2.2.0 (March 27, 2021) [☰](https://github.com/philnash/pwned/compare/v2.1.0...v2.2.0)
+
+- Minor updates
+
+  - Adds `:proxy` option to `request_options` to directly set a proxy on the
+    request. Fixes #21, thanks [dparpyani](https://github.com/dparpyani).
+
 ## 2.1.0 (July 8, 2020) [☰](https://github.com/philnash/pwned/compare/v2.0.2...v2.1.0)
 
 - Minor updates
