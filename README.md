@@ -182,11 +182,16 @@ end
 #### Custom Request Options
 
 You can configure network requests made from the validator using `:request_options` (see [Net::HTTP.start](http://ruby-doc.org/stdlib-2.6.3/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start) for the list of available options).
-In addition to these options, HTTP headers can be specified with the `:headers` key, e.g. `"User-Agent"`):
+In addition to these options, HTTP headers can be specified with the `:headers` key (e.g. `"User-Agent"`) and proxy can be specified with the `:proxy` key:
 
 ```ruby
   validates :password, not_pwned: {
-    request_options: { read_timeout: 5, open_timeout: 1, headers: { "User-Agent" => "Super fun user agent" } }
+    request_options: {
+      read_timeout: 5,
+      open_timeout: 1,
+      headers: { "User-Agent" => "Super fun user agent" },
+      proxy: "https://username:password@example.com:12345"
+    }
   }
 ```
 

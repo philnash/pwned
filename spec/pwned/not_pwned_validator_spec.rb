@@ -43,6 +43,24 @@ RSpec.describe NotPwnedValidator do
         with(headers: { "User-Agent" => "Super fun user agent" })).
         to have_been_made.once
     end
+
+    it "allows the proxy to be set" do
+      Model.validates :password, not_pwned: {
+        request_options: { proxy: "https://username:password@example.com:12345" }
+      }
+      model = create_model("password")
+
+      # Webmock doesn't support proxy assertions (https://github.com/bblimke/webmock/issues/753)
+      # so we check that Net::HTTP receives the correct arguments.
+      expect(Net::HTTP).to receive(:start).
+        with("api.pwnedpasswords.com", 443, "example.com", 12345, "username", "password", anything).
+        and_call_original
+
+      expect(model).to_not be_valid
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
+        with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })).
+        to have_been_made.once
+    end
   end
 
   describe "when not pwned", pwned_range: "37D5B" do

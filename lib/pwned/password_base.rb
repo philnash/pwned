@@ -65,7 +65,7 @@ module Pwned
 
     private
 
-    attr_reader :request_options, :request_headers
+    attr_reader :request_options, :request_headers, :request_proxy
 
     def fetch_pwned_count
       for_each_response_line do |line|
@@ -108,7 +108,15 @@ module Pwned
       request.initialize_http_header(request_headers)
       request_options[:use_ssl] = true
 
-      Net::HTTP.start(uri.host, uri.port, request_options) do |http|
+      Net::HTTP.start(
+        uri.host,
+        uri.port,
+        request_proxy&.host,
+        request_proxy&.port,
+        request_proxy&.user,
+        request_proxy&.password,
+        request_options
+      ) do |http|
         http.request(request, &block)
       end
     end
