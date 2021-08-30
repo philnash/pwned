@@ -1,6 +1,14 @@
 # Changelog for `Pwned`
 
-## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.0.2...master)
+## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.2.0...master)
+
+## 2.3.0 (August 30, 2021) [☰](https://github.com/philnash/pwned/compare/v2.2.0...v2.3.0)
+
+- Minor updates
+
+  - Restores `Net::HTTP` default behaviour to use environment supplied HTTP
+    proxy
+  - Adds `ignore_env_proxy` to ignore any proxies set in the environment
 
 ## 2.2.0 (March 27, 2021) [☰](https://github.com/philnash/pwned/compare/v2.1.0...v2.2.0)
 
