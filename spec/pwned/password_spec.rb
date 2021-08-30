@@ -149,51 +149,121 @@ RSpec.describe Pwned::Password do
         to have_been_made.once
     end
 
-    it "allows the proxy to be set" do
-      ENV["http_proxy"] = "https://username2:password2@example2.com:56789"
-      proxy = "https://username:password@example.com:12345"
+    let(:subject) { Pwned::Password.new("password", request_options).pwned? }
 
-      # Webmock doesn't support proxy assertions (https://github.com/bblimke/webmock/issues/753)
-      # so we check that Net::HTTP returns the correct values
-      allow(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
-        http = original_method.call(*args)
-        expect(http.proxy_from_env?).to eq(false)
-        expect(http.proxy_address).to eq("example.com")
-        expect(http.proxy_user).to eq("username")
-        expect(http.proxy_pass).to eq("password")
-        expect(http.proxy_port).to eq(12_345)
-        original_method.call(*args, &block)
+    let(:request_options) { {} }
+    let(:environment_proxy) { "https://username:password@environment.com:12345" }
+    let(:explicit_proxy) { "https://username:password@explicit.com:56789" }
+
+    shared_examples_for "uses explicit proxy" do
+      it "uses proxy from request options" do
+        expect(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
+          http = original_method.call(*args)
+          expect(http.proxy_from_env?).to eq(false)
+          expect(http.proxy_address).to eq("explicit.com")
+          expect(http.proxy_user).to eq("username")
+          expect(http.proxy_pass).to eq("password")
+          expect(http.proxy_port).to eq(56_789)
+          original_method.call(*args, &block)
+        end
+
+        subject
+
+        expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
+          .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
+          .to have_been_made.once
       end
-
-      password = Pwned::Password.new("password", proxy: proxy)
-      password.pwned?
-
-      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
-        .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
-        .to have_been_made.once
     end
 
-    it "defaults to proxy found in environment variable" do
-      ENV["http_proxy"] = "https://username:password@example.com:12345"
-
-      # Webmock doesn't support proxy assertions (https://github.com/bblimke/webmock/issues/753)
-      # so we check that Net::HTTP returns the correct values
-      allow(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
-        http = original_method.call(*args)
-        expect(http.proxy_from_env?).to eq(true)
-        expect(http.proxy_address).to eq("example.com")
-        expect(http.proxy_user).to eq("username")
-        expect(http.proxy_pass).to eq("password")
-        expect(http.proxy_port).to eq(12_345)
-        original_method.call(*args, &block)
+    shared_examples_for "doesn't use proxy from enviroment" do
+      context "explicit proxy is given" do
+        before { request_options[:proxy] = explicit_proxy }
+        include_examples "uses explicit proxy"
       end
 
-      password = Pwned::Password.new("password")
-      password.pwned?
+      context "explicit proxy not given" do
+        before { request_options.delete(:proxy) }
 
-      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
-        .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
-        .to have_been_made.once
+        it "doesn't use a proxy" do
+          expect(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
+            http = original_method.call(*args)
+            expect(http.proxy?).to eq(false)
+            original_method.call(*args, &block)
+          end
+
+          subject
+
+          expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
+            .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
+            .to have_been_made.once
+        end
+      end
+    end
+
+    context "proxy exists in environment" do
+      before { ENV["http_proxy"] = environment_proxy }
+
+      context "find_proxy is not given" do
+        before { request_options.delete(:find_proxy) }
+
+        include_examples "doesn't use proxy from enviroment"
+      end
+
+      context "find_proxy is false" do
+        before { request_options[:find_proxy] = false }
+
+        include_examples "doesn't use proxy from enviroment"
+      end
+
+      context "find_proxy is true" do
+        before { request_options[:find_proxy] = true }
+
+        context "proxy is given in request options" do
+          before { request_options[:proxy] = explicit_proxy }
+          include_examples "uses explicit proxy"
+        end
+
+        context "proxy not given in request options" do
+          let(:request_options) { {} }
+
+          it "uses proxy from the environment" do
+            expect(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
+              http = original_method.call(*args)
+              expect(http.proxy_from_env?).to eq(true)
+              expect(http.proxy_address).to eq("environment.com")
+              expect(http.proxy_user).to eq("username")
+              expect(http.proxy_pass).to eq("password")
+              expect(http.proxy_port).to eq(12_345)
+              original_method.call(*args, &block)
+            end
+
+            subject
+
+            expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
+              .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
+              .to have_been_made.once
+          end
+        end
+      end
+    end
+
+    context "proxy environment variable does not exist" do
+      before { ENV["http_proxy"] = nil }
+
+      context "find_proxy is not given" do
+        before { request_options.delete(:find_proxy) }
+        include_examples "doesn't use proxy from enviroment"
+      end
+
+      context "find_proxy is false" do
+        before { request_options[:find_proxy] = false }
+        include_examples "doesn't use proxy from enviroment"
+      end
+
+      context "find_proxy is true" do
+        before { request_options[:find_proxy] = true }
+        include_examples "doesn't use proxy from enviroment"
+      end
     end
   end
 

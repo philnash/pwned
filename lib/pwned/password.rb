@@ -38,6 +38,7 @@ module Pwned
       @request_headers = Hash(request_options.delete(:headers))
       @request_headers = DEFAULT_REQUEST_HEADERS.merge(@request_headers)
       @request_proxy = URI(request_options.delete(:proxy)) if request_options.key?(:proxy)
+      @find_proxy = request_options.delete(:find_proxy) || false
     end
   end
 end
