@@ -150,20 +150,50 @@ RSpec.describe Pwned::Password do
     end
 
     it "allows the proxy to be set" do
+      ENV["http_proxy"] = "https://username2:password2@example2.com:56789"
       proxy = "https://username:password@example.com:12345"
 
       # Webmock doesn't support proxy assertions (https://github.com/bblimke/webmock/issues/753)
-      # so we check that Net::HTTP receives the correct arguments.
-      expect(Net::HTTP).to receive(:start).
-        with("api.pwnedpasswords.com", 443, "example.com", 12345, "username", "password", anything).
-        and_call_original
+      # so we check that Net::HTTP returns the correct values
+      allow(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
+        http = original_method.call(*args)
+        expect(http.proxy_from_env?).to eq(false)
+        expect(http.proxy_address).to eq("example.com")
+        expect(http.proxy_user).to eq("username")
+        expect(http.proxy_pass).to eq("password")
+        expect(http.proxy_port).to eq(12_345)
+        original_method.call(*args, &block)
+      end
 
       password = Pwned::Password.new("password", proxy: proxy)
       password.pwned?
 
-      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
-        with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })).
-        to have_been_made.once
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
+        .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
+        .to have_been_made.once
+    end
+
+    it "defaults to proxy found in environment variable" do
+      ENV["http_proxy"] = "https://username:password@example.com:12345"
+
+      # Webmock doesn't support proxy assertions (https://github.com/bblimke/webmock/issues/753)
+      # so we check that Net::HTTP returns the correct values
+      allow(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
+        http = original_method.call(*args)
+        expect(http.proxy_from_env?).to eq(true)
+        expect(http.proxy_address).to eq("example.com")
+        expect(http.proxy_user).to eq("username")
+        expect(http.proxy_pass).to eq("password")
+        expect(http.proxy_port).to eq(12_345)
+        original_method.call(*args, &block)
+      end
+
+      password = Pwned::Password.new("password")
+      password.pwned?
+
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
+        .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
+        .to have_been_made.once
     end
   end
 
@@ -196,5 +226,4 @@ RSpec.describe Pwned::Password do
       expect(password).not_to be_pwned
     end
   end
-
 end

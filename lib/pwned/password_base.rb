@@ -111,7 +111,7 @@ module Pwned
       Net::HTTP.start(
         uri.host,
         uri.port,
-        request_proxy&.host,
+        request_proxy&.host || :ENV,
         request_proxy&.port,
         request_proxy&.user,
         request_proxy&.password,
