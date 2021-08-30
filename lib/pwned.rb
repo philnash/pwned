@@ -35,6 +35,9 @@ module Pwned
   #   calling the API
   # @option request_options [Symbol] :headers ({ "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })
   #   HTTP headers to include in the request
+  # @option request_options [Symbol] :ignore_env_proxy (false) The library
+  #   will try to infer an HTTP proxy from the `http_proxy` environment
+  #   variable. If you do not want this behaviour, set this option to true.
   # @return [Boolean] Whether the password appears in the data breaches or not.
   # @since 1.1.0
   def self.pwned?(password, request_options={})
@@ -53,6 +56,9 @@ module Pwned
   #   calling the API
   # @option request_options [Symbol] :headers ({ "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })
   #   HTTP headers to include in the request
+  # @option request_options [Symbol] :ignore_env_proxy (false) The library
+  #   will try to infer an HTTP proxy from the `http_proxy` environment
+  #   variable. If you do not want this behaviour, set this option to true.
   # @return [Integer] The number of times the password has appeared in the data
   #   breaches.
   # @since 1.1.0

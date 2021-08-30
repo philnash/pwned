@@ -65,7 +65,7 @@ module Pwned
 
     private
 
-    attr_reader :request_options, :request_headers, :request_proxy
+    attr_reader :request_options, :request_headers, :request_proxy, :ignore_env_proxy
 
     def fetch_pwned_count
       for_each_response_line do |line|
@@ -108,10 +108,12 @@ module Pwned
       request.initialize_http_header(request_headers)
       request_options[:use_ssl] = true
 
+      environment_proxy = ignore_env_proxy ? nil : :ENV
+
       Net::HTTP.start(
         uri.host,
         uri.port,
-        request_proxy&.host,
+        request_proxy&.host || environment_proxy,
         request_proxy&.port,
         request_proxy&.user,
         request_proxy&.password,
@@ -136,6 +138,5 @@ module Pwned
 
       yield last_line unless last_line.empty?
     end
-
   end
 end

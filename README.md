@@ -8,28 +8,31 @@ An easy, Ruby way to use the Pwned Passwords API.
 
 ## Table of Contents
 
-- [Pwned](#pwned)
-  - [Table of Contents](#table-of-contents)
-  - [About](#about)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [Plain Ruby](#plain-ruby)
-      - [Advanced](#advanced)
-    - [ActiveRecord Validator](#activerecord-validator)
-      - [I18n](#i18n)
-      - [Threshold](#threshold)
-      - [Network Error Handling](#network-error-handling)
-      - [Custom Request Options](#custom-request-options)
-    - [Using Asynchronously](#using-asynchronously)
-    - [Devise](#devise)
-    - [Rodauth](#rodauth)
-    - [Command line](#command-line)
-    - [Unpwn](#unpwn)
-  - [How Pwned is Pi?](#how-pwned-is-pi)
-  - [Development](#development)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Code of Conduct](#code-of-conduct)
+* [Table of Contents](#table-of-contents)
+* [About](#about)
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Plain Ruby](#plain-ruby)
+    * [Custom request options](#custom-request-options)
+      * [HTTP Headers](#http-headers)
+      * [HTTP Proxy](#http-proxy)
+  * [ActiveRecord Validator](#activerecord-validator)
+    * [I18n](#i18n)
+    * [Threshold](#threshold)
+    * [Network Error Handling](#network-error-handling)
+    * [Custom Request Options](#custom-request-options-1)
+      * [HTTP Headers](#http-headers-1)
+      * [HTTP Proxy](#http-proxy-1)
+  * [Using Asynchronously](#using-asynchronously)
+  * [Devise](#devise)
+  * [Rodauth](#rodauth)
+  * [Command line](#command-line)
+  * [Unpwn](#unpwn)
+* [How Pwned is Pi?](#how-pwned-is-pi)
+* [Development](#development)
+* [Contributing](#contributing)
+* [License](#license)
+* [Code of Conduct](#code-of-conduct)
 
 ## About
 
@@ -105,13 +108,49 @@ Pwned.pwned_count("password")
 #=> 3303003
 ```
 
-#### Advanced
+#### Custom request options
 
-You can set http request options to be used with `Net::HTTP.start` when making the request to the API. These options are
-documented in the [`Net::HTTP.start` documentation](http://ruby-doc.org/stdlib-2.6.3/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start). The `:headers` option defines defines HTTP headers. These headers must be string keys.
+You can set http request options to be used with `Net::HTTP.start` when making the request to the API. These options are documented in the [`Net::HTTP.start` documentation](https://ruby-doc.org/stdlib-3.0.0/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start). For example:
 
 ```ruby
-password = Pwned::Password.new("password", headers: { 'User-Agent' => 'Super fun new user agent' }, read_timeout: 10)
+password = Pwned::Password.new("password", read_timeout: 10)
+```
+
+##### HTTP Headers
+
+The `:headers` option defines defines HTTP headers. These headers must be string keys.
+
+```ruby
+password = Pwned::Password.new("password", headers: {
+  'User-Agent' => 'Super fun new user agent'
+})
+```
+
+##### HTTP Proxy
+
+An HTTP proxy can be set using the `http_proxy` or `HTTP_PROXY` environment variable. This is the same way that `Net::HTTP` handles HTTP proxies if no proxy options are given. See [`URI::Generic#find_proxy`](https://ruby-doc.org/stdlib-3.0.1/libdoc/uri/rdoc/URI/Generic.html#method-i-find_proxy) for full details on how Ruby detects a proxy from the environment.
+
+```ruby
+# Set in the environment
+ENV["http_proxy"] = "https://username:password@example.com:12345"
+
+# Will use the above proxy
+password = Pwned::Password.new("password")
+```
+
+You can specify a custom HTTP proxy with the `:proxy` option:
+
+```ruby
+password = Pwned::Password.new(
+  "password",
+  proxy: "https://username:password@example.com:12345"
+)
+```
+
+If you don't want to set a proxy and you don't want a proxy to be inferred from the environment, set the `:ignore_env_proxy` key:
+
+```ruby
+password = Pwned::Password.new("password", ignore_env_proxy: true)
 ```
 
 ### ActiveRecord Validator
@@ -181,16 +220,58 @@ end
 
 #### Custom Request Options
 
-You can configure network requests made from the validator using `:request_options` (see [Net::HTTP.start](http://ruby-doc.org/stdlib-2.6.3/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start) for the list of available options).
-In addition to these options, HTTP headers can be specified with the `:headers` key (e.g. `"User-Agent"`) and proxy can be specified with the `:proxy` key:
+You can configure network requests made from the validator using `:request_options` (see [Net::HTTP.start](http://ruby-doc.org/stdlib-2.6.3/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start) for the list of available options). 
 
 ```ruby
   validates :password, not_pwned: {
     request_options: {
       read_timeout: 5,
-      open_timeout: 1,
-      headers: { "User-Agent" => "Super fun user agent" },
+      open_timeout: 1
+    }
+  }
+```
+
+In addition to these options, you can also set the following:
+
+##### HTTP Headers
+
+HTTP headers can be specified with the `:headers` key (e.g. `"User-Agent"`)
+
+```ruby
+  validates :password, not_pwned: {
+    request_options: {
+      headers: { "User-Agent" => "Super fun user agent" }
+    }
+  }
+```
+
+##### HTTP Proxy
+
+An HTTP proxy can be set using the `http_proxy` or `HTTP_PROXY` environment variable. This is the same way that `Net::HTTP` handles HTTP proxies if no proxy options are given. See [`URI::Generic#find_proxy`](https://ruby-doc.org/stdlib-3.0.1/libdoc/uri/rdoc/URI/Generic.html#method-i-find_proxy) for full details on how Ruby detects a proxy from the environment.
+
+```ruby
+  # Set in the environment
+  ENV["http_proxy"] = "https://username:password@example.com:12345"
+
+  validates :password, not_pwned: true
+```
+
+You can specify a custom HTTP proxy with the `:proxy` key:
+
+```ruby
+  validates :password, not_pwned: {
+    request_options: {
       proxy: "https://username:password@example.com:12345"
+    }
+  }
+```
+
+If you don't want to set a proxy and you don't want a proxy to be inferred from the environment, set the `:ignore_env_proxy` key:
+
+```ruby
+  validates :password, not_pwned: {
+    request_options: {
+      ignore_env_proxy: true
     }
   }
 ```
@@ -204,6 +285,8 @@ hashed_password = Pwned.hash_password(password)
 # some time later
 Pwned::HashPassword.new(hashed_password, request_options).pwned?
 ```
+
+The `Pwned::HashPassword` constructor takes all the same options as the regular `Pwned::Password` contructor.
 
 ### Devise
 
