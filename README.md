@@ -128,7 +128,7 @@ password = Pwned::Password.new("password", headers: {
 
 ##### HTTP Proxy
 
-An HTTP proxy can be set using the `http_proxy` environment variable:
+An HTTP proxy can be set using the `http_proxy` or `HTTP_PROXY` environment variable. This is the same way that `Net::HTTP` handles HTTP proxies if no proxy options are given. See [`URI::Generic#find_proxy`](https://ruby-doc.org/stdlib-3.0.1/libdoc/uri/rdoc/URI/Generic.html#method-i-find_proxy) for full details on how Ruby detects a proxy from the environment.
 
 ```ruby
 # Set in the environment
@@ -247,7 +247,7 @@ HTTP headers can be specified with the `:headers` key (e.g. `"User-Agent"`)
 
 ##### HTTP Proxy
 
-An HTTP proxy can be set using the `http_proxy` environment variable:
+An HTTP proxy can be set using the `http_proxy` or `HTTP_PROXY` environment variable. This is the same way that `Net::HTTP` handles HTTP proxies if no proxy options are given. See [`URI::Generic#find_proxy`](https://ruby-doc.org/stdlib-3.0.1/libdoc/uri/rdoc/URI/Generic.html#method-i-find_proxy) for full details on how Ruby detects a proxy from the environment.
 
 ```ruby
   # Set in the environment
