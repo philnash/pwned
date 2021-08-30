@@ -22,6 +22,9 @@ module Pwned
     #   calling the API
     # @option request_options [Symbol] :headers ({ "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })
     #   HTTP headers to include in the request
+    # @option request_options [Symbol] :ignore_env_proxy (false) The library
+    #   will try to infer an HTTP proxy from the `http_proxy` environment
+    #   variable. If you do not want this behaviour, set this option to true.
     # @raise [TypeError] if the password is not a string.
     # @since 2.1.0
     def initialize(hashed_password, request_options={})
@@ -31,6 +34,7 @@ module Pwned
       @request_headers = Hash(request_options.delete(:headers))
       @request_headers = DEFAULT_REQUEST_HEADERS.merge(@request_headers)
       @request_proxy = URI(request_options.delete(:proxy)) if request_options.key?(:proxy)
+      @ignore_env_proxy = request_options.delete(:ignore_env_proxy) || false
     end
   end
 end

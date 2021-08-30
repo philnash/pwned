@@ -175,7 +175,7 @@ RSpec.describe Pwned::Password do
       end
     end
 
-    shared_examples_for "doesn't use proxy from enviroment" do
+    shared_examples_for "doesn't use proxy from environment" do
       context "explicit proxy is given" do
         before { request_options[:proxy] = explicit_proxy }
         include_examples "uses explicit proxy"
@@ -200,69 +200,78 @@ RSpec.describe Pwned::Password do
       end
     end
 
+    shared_examples_for "uses proxy from environment" do
+      context "proxy not given in request options" do
+        let(:request_options) { {} }
+
+        it "uses proxy from the environment" do
+          expect(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
+            http = original_method.call(*args)
+            expect(http.proxy_from_env?).to eq(true)
+            expect(http.proxy_address).to eq("environment.com")
+            expect(http.proxy_user).to eq("username")
+            expect(http.proxy_pass).to eq("password")
+            expect(http.proxy_port).to eq(12_345)
+            original_method.call(*args, &block)
+          end
+
+          subject
+
+          expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
+            .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
+            .to have_been_made.once
+        end
+      end
+    end
+
     context "proxy exists in environment" do
       before { ENV["http_proxy"] = environment_proxy }
 
-      context "find_proxy is not given" do
-        before { request_options.delete(:find_proxy) }
-
-        include_examples "doesn't use proxy from enviroment"
-      end
-
-      context "find_proxy is false" do
-        before { request_options[:find_proxy] = false }
-
-        include_examples "doesn't use proxy from enviroment"
-      end
-
-      context "find_proxy is true" do
-        before { request_options[:find_proxy] = true }
+      context "ignore_env_proxy is not given" do
+        before { request_options.delete(:ignore_env_proxy) }
 
         context "proxy is given in request options" do
           before { request_options[:proxy] = explicit_proxy }
           include_examples "uses explicit proxy"
         end
 
-        context "proxy not given in request options" do
-          let(:request_options) { {} }
+        include_examples "uses proxy from environment"
+      end
 
-          it "uses proxy from the environment" do
-            expect(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
-              http = original_method.call(*args)
-              expect(http.proxy_from_env?).to eq(true)
-              expect(http.proxy_address).to eq("environment.com")
-              expect(http.proxy_user).to eq("username")
-              expect(http.proxy_pass).to eq("password")
-              expect(http.proxy_port).to eq(12_345)
-              original_method.call(*args, &block)
-            end
+      context "ignore_env_proxy is false" do
+        before { request_options[:ignore_env_proxy] = false }
 
-            subject
-
-            expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
-              .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
-              .to have_been_made.once
-          end
+        context "proxy is given in request options" do
+          before { request_options[:proxy] = explicit_proxy }
+          include_examples "uses explicit proxy"
         end
+
+        include_examples "uses proxy from environment"
+      end
+
+      context "ignore_env_proxy is true" do
+        before { request_options[:ignore_env_proxy] = true }
+
+        include_examples "doesn't use proxy from environment"
       end
     end
 
     context "proxy environment variable does not exist" do
       before { ENV["http_proxy"] = nil }
 
-      context "find_proxy is not given" do
-        before { request_options.delete(:find_proxy) }
-        include_examples "doesn't use proxy from enviroment"
+      context "ignore_env_proxy is not given" do
+        before { request_options.delete(:ignore_env_proxy) }
+        include_examples "doesn't use proxy from environment"
       end
 
-      context "find_proxy is false" do
-        before { request_options[:find_proxy] = false }
-        include_examples "doesn't use proxy from enviroment"
+      context "ignore_env_proxy is true" do
+        before { request_options[:ignore_env_proxy] = true }
+        include_examples "doesn't use proxy from environment"
       end
 
-      context "find_proxy is true" do
-        before { request_options[:find_proxy] = true }
-        include_examples "doesn't use proxy from enviroment"
+      context "ignore_env_proxy is false" do
+        before { request_options[:ignore_env_proxy] = false }
+        include_examples "doesn't use proxy from environment"
       end
     end
   end
