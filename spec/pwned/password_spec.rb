@@ -160,6 +160,16 @@ RSpec.describe Pwned::Password do
         to have_been_made.once
     end
 
+    it "allows headers to be set by default or in the constructor and merges them" do
+      Pwned.default_request_options = { headers: { "User-Agent" => "Default user agent" } }
+      password = Pwned::Password.new("password", headers: { "X-Test-Header" => "this-is-a-test" })
+      password.pwned?
+
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
+        with(headers: { "User-Agent" => "Default user agent", "X-Test-Header" => "this-is-a-test" })).
+        to have_been_made.once
+    end
+
     let(:subject) { Pwned::Password.new("password", request_options).pwned? }
 
     let(:request_options) { {} }

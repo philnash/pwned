@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "pwned/password_base"
+require "pwned/deep_merge"
 
 module Pwned
   ##
@@ -9,6 +10,7 @@ module Pwned
   # @see https://haveibeenpwned.com/API/v2#PwnedPasswords
   class Password
     include PasswordBase
+    using DeepMerge
     ##
     # @return [String] the password that is being checked.
     # @since 1.0.0
@@ -36,7 +38,7 @@ module Pwned
       raise TypeError, "password must be of type String" unless password.is_a? String
       @password = password
       @hashed_password = Pwned.hash_password(password)
-      @request_options = Pwned.default_request_options.merge(request_options)
+      @request_options = Pwned.default_request_options.deep_merge(request_options)
       @request_headers = Hash(@request_options.delete(:headers))
       @request_headers = DEFAULT_REQUEST_HEADERS.merge(@request_headers)
       @request_proxy = URI(@request_options.delete(:proxy)) if @request_options.key?(:proxy)
