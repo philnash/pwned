@@ -140,12 +140,33 @@ RSpec.describe Pwned::Password do
         to have_been_made.once
     end
 
-    it "allows the user agent to be set" do
+    it "allows the user agent to be set in constructor" do
+      Pwned.default_request_options = { headers: { "User-Agent" => "Default user agent" } }
       password = Pwned::Password.new("password", headers: { "User-Agent" => "Super fun user agent" })
       password.pwned?
 
       expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
         with(headers: { "User-Agent" => "Super fun user agent" })).
+        to have_been_made.once
+    end
+
+    it "allows the user agent to be set with default settings" do
+      Pwned.default_request_options = { headers: { "User-Agent" => "Default user agent" } }
+      password = Pwned::Password.new("password")
+      password.pwned?
+
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
+        with(headers: { "User-Agent" => "Default user agent" })).
+        to have_been_made.once
+    end
+
+    it "allows headers to be set by default or in the constructor and merges them" do
+      Pwned.default_request_options = { headers: { "User-Agent" => "Default user agent" } }
+      password = Pwned::Password.new("password", headers: { "X-Test-Header" => "this-is-a-test" })
+      password.pwned?
+
+      expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6").
+        with(headers: { "User-Agent" => "Default user agent", "X-Test-Header" => "this-is-a-test" })).
         to have_been_made.once
     end
 
@@ -272,6 +293,28 @@ RSpec.describe Pwned::Password do
       context "ignore_env_proxy is false" do
         before { request_options[:ignore_env_proxy] = false }
         include_examples "doesn't use proxy from environment"
+      end
+    end
+
+    context "proxy given in default request options" do
+      before { Pwned.default_request_options = { proxy: "https://username:password@default.com:12345" } }
+
+      it "uses proxy from the default require options" do
+        expect(Net::HTTP).to receive(:start).and_wrap_original do |original_method, *args, &block|
+          http = original_method.call(*args)
+          expect(http.proxy_from_env?).to eq(false)
+          expect(http.proxy_address).to eq("default.com")
+          expect(http.proxy_user).to eq("username")
+          expect(http.proxy_pass).to eq("password")
+          expect(http.proxy_port).to eq(12_345)
+          original_method.call(*args, &block)
+        end
+
+        subject
+
+        expect(a_request(:get, "https://api.pwnedpasswords.com/range/5BAA6")
+          .with(headers: { "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" }))
+          .to have_been_made.once
       end
     end
   end

@@ -110,10 +110,18 @@ Pwned.pwned_count("password")
 
 #### Custom request options
 
-You can set http request options to be used with `Net::HTTP.start` when making the request to the API. These options are documented in the [`Net::HTTP.start` documentation](https://ruby-doc.org/stdlib-3.0.0/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start). For example:
+You can set HTTP request options to be used with `Net::HTTP.start` when making the request to the API. These options are documented in the [`Net::HTTP.start` documentation](https://ruby-doc.org/stdlib-3.0.0/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start).
+
+You can pass the options to the constructor:
 
 ```ruby
 password = Pwned::Password.new("password", read_timeout: 10)
+```
+
+You can also specify global defaults:
+
+```ruby
+Pwned.default_request_options = { read_timeout: 10 }
 ```
 
 ##### HTTP Headers
@@ -230,6 +238,8 @@ You can configure network requests made from the validator using `:request_optio
     }
   }
 ```
+
+These options override the globally defined default options (see above).
 
 In addition to these options, you can also set the following:
 

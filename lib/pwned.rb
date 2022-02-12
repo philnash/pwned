@@ -23,6 +23,29 @@ end
 # results for a password.
 
 module Pwned
+  @default_request_options = {}
+
+  ##
+  # The default request options passed to +Net::HTTP.start+ when calling the API.
+  #
+  # @return [Hash]
+  # @see Pwned::Password#initialize
+  def self.default_request_options
+    @default_request_options
+  end
+
+  ##
+  # Sets the default request options passed to +Net::HTTP.start+ when calling
+  # the API.
+  #
+  # The default options may be overridden in +Pwned::Password#new+.
+  #
+  # @param [Hash] request_options
+  # @see Pwned::Password#initialize
+  def self.default_request_options=(request_options)
+    @default_request_options = request_options
+  end
+
   ##
   # Returns +true+ when the password has been pwned.
   #
