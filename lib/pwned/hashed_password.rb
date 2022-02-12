@@ -19,7 +19,7 @@ module Pwned
     #
     # @param hashed_password [String] The hash of the password you want to check against the API.
     # @param [Hash] request_options Options that can be passed to +Net::HTTP.start+ when
-    #   calling the API
+    #   calling the API. This overrides any keys specified in +Pwned.default_request_options+.
     # @option request_options [Symbol] :headers ({ "User-Agent" => "Ruby Pwned::Password #{Pwned::VERSION}" })
     #   HTTP headers to include in the request
     # @option request_options [Symbol] :ignore_env_proxy (false) The library
@@ -30,11 +30,11 @@ module Pwned
     def initialize(hashed_password, request_options={})
       raise TypeError, "hashed_password must be of type String" unless hashed_password.is_a? String
       @hashed_password = hashed_password.upcase
-      @request_options = Hash(request_options).dup
-      @request_headers = Hash(request_options.delete(:headers))
+      @request_options = Pwned.default_request_options.merge(request_options)
+      @request_headers = Hash(@request_options.delete(:headers))
       @request_headers = DEFAULT_REQUEST_HEADERS.merge(@request_headers)
-      @request_proxy = URI(request_options.delete(:proxy)) if request_options.key?(:proxy)
-      @ignore_env_proxy = request_options.delete(:ignore_env_proxy) || false
+      @request_proxy = URI(@request_options.delete(:proxy)) if @request_options.key?(:proxy)
+      @ignore_env_proxy = @request_options.delete(:ignore_env_proxy) || false
     end
   end
 end
