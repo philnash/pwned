@@ -1,6 +1,13 @@
 # Changelog for `Pwned`
 
-## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.2.0...master)
+## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.4.0...master)
+
+## 2.4.0 (February 23, 2022) [☰](https://github.com/philnash/pwned/compare/v2.3.0...v2.4.0)
+
+- Minor updates
+
+  - Adds `default_request_options` to set global defaults for the gem
+  - Adds Ruby 3.1 to the test matrix
 
 ## 2.3.0 (August 30, 2021) [☰](https://github.com/philnash/pwned/compare/v2.2.0...v2.3.0)
 
