@@ -228,7 +228,7 @@ end
 
 #### Custom Request Options
 
-You can configure network requests made from the validator using `:request_options` (see [Net::HTTP.start](http://ruby-doc.org/stdlib-2.6.3/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start) for the list of available options). 
+You can configure network requests made from the validator using `:request_options` (see [Net::HTTP.start](http://ruby-doc.org/stdlib-2.6.3/libdoc/net/http/rdoc/Net/HTTP.html#method-c-start) for the list of available options).
 
 ```ruby
   validates :password, not_pwned: {
@@ -288,15 +288,15 @@ If you don't want to set a proxy and you don't want a proxy to be inferred from 
 
 ### Using Asynchronously
 
-You may have a use case for hashing the password in advance, and then making the call to the Pwned Passwords API later (for example if you want to enqueue a job without storing the plaintext password). To do this, you can hash the password with the `Pwned.hash_password` method and then initialize the `Pwned::HashPassword` class with the hash, like this:
+You may have a use case for hashing the password in advance, and then making the call to the Pwned Passwords API later (for example if you want to enqueue a job without storing the plaintext password). To do this, you can hash the password with the `Pwned.hash_password` method and then initialize the `Pwned::HashedPassword` class with the hash, like this:
 
 ```ruby
 hashed_password = Pwned.hash_password(password)
 # some time later
-Pwned::HashPassword.new(hashed_password, request_options).pwned?
+Pwned::HashedPassword.new(hashed_password, request_options).pwned?
 ```
 
-The `Pwned::HashPassword` constructor takes all the same options as the regular `Pwned::Password` contructor.
+The `Pwned::HashedPassword` constructor takes all the same options as the regular `Pwned::Password` contructor.
 
 ### Devise
 
