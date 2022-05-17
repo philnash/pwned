@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
-require "digest"
-require "pwned/version"
-require "pwned/error"
-require "pwned/password"
-require "pwned/hashed_password"
+require "zeitwerk"
+loader = Zeitwerk::Loader.for_gem
+loader.ignore("#{__dir__}/pwned/validators")
+loader.setup # ready!
+
 
 begin
   # Load Rails and our custom validator
   require "active_model"
-  require "pwned/not_pwned_validator"
+  require "pwned/validators/not_pwned_validator"
+  require "pwned/validators/pwned_validator"
 
   # Initialize I18n (validation error message)
   require "active_support/i18n"

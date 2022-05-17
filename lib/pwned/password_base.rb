@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "digest"
-require "net/http"
-
 module Pwned
   ##
   # This class represents a password. It does all the work of talking to the
