@@ -2,6 +2,13 @@
 
 ## Ongoing [☰](https://github.com/philnash/pwned/compare/v2.4.0...master)
 
+## 2.4.1 (August 29, 2022) [☰](https://github.com/philnash/pwned/compare/v2.4.0...v2.4.1)
+
+- Minor updates
+
+  - Adds French and Dutch translations
+  - Adds Rails 7 to the test matrix
+
 ## 2.4.0 (February 23, 2022) [☰](https://github.com/philnash/pwned/compare/v2.3.0...v2.4.0)
 
 - Minor updates
