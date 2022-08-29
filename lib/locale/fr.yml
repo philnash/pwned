@@ -1,0 +1,5 @@
+fr:
+  errors:
+    messages:
+      not_pwned: "est déjà apparu dans une brèche de données et ne doit pas être utilisé"
+      pwned_error: "n'a pas pu être vérifié par rapport aux brèches de données passées"

@@ -1,0 +1,5 @@
+nl:
+  errors:
+    messages:
+      not_pwned: "is eerder verschenen in een datalek en mag niet worden gebruikt"
+      pwned_error: "kon niet worden geverifieerd in eerdere datalekken"
