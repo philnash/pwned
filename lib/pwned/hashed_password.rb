@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require "pwned/password_base"
-require "pwned/deep_merge"
-
-
 module Pwned
   ##
   # This class represents a hashed password. It does all the work of talking to the

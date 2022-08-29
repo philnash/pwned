@@ -1,4 +1,4 @@
-module DeepMerge
+module Pwned::DeepMerge
   refine Hash do
     def deep_merge(other)
       self.merge(other) do |key, this_val, other_val|
