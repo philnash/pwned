@@ -99,7 +99,7 @@ module Pwned
       @hashed_password[HASH_PREFIX_LENGTH..-1]
     end
 
-    # Make a HTTP GET request given the url and headers.
+    # Make a HTTP GET request given the URL and headers.
     # Yields a `Net::HTTPResponse`.
     def with_http_response(url, &block)
       uri = URI(url)

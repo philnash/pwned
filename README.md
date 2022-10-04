@@ -4,7 +4,7 @@ An easy, Ruby way to use the Pwned Passwords API.
 
 [![Gem Version](https://badge.fury.io/rb/pwned.svg)](https://rubygems.org/gems/pwned) ![Build Status](https://github.com/philnash/pwned/workflows/tests/badge.svg) [![Maintainability](https://codeclimate.com/github/philnash/pwned/badges/gpa.svg)](https://codeclimate.com/github/philnash/pwned/maintainability) [![Inline docs](https://inch-ci.org/github/philnash/pwned.svg?branch=master)](https://inch-ci.org/github/philnash/pwned)
 
-[API docs](https://www.rubydoc.info/gems/pwned) | [GitHub repo](https://github.com/philnash/pwned)
+[API docs](https://www.rubydoc.info/gems/pwned) | [GitHub repository](https://github.com/philnash/pwned)
 
 ## Table of Contents
 
@@ -88,7 +88,7 @@ password.pwned_count
 #=> 3303003
 ```
 
-Since you are likely using this as part of a signup flow, it is recommended that you rescue errors so if the service does go down, your user journey is not disturbed.
+Since you are likely using this as part of a sign-up flow, it is recommended that you rescue errors so if the service does go down, your user journey is not disturbed.
 
 ```ruby
 begin
@@ -126,7 +126,7 @@ Pwned.default_request_options = { read_timeout: 10 }
 
 ##### HTTP Headers
 
-The `:headers` option defines defines HTTP headers. These headers must be string keys.
+The `:headers` option defines HTTP headers. These headers must be string keys.
 
 ```ruby
 password = Pwned::Password.new("password", headers: {
@@ -296,7 +296,7 @@ hashed_password = Pwned.hash_password(password)
 Pwned::HashedPassword.new(hashed_password, request_options).pwned?
 ```
 
-The `Pwned::HashedPassword` constructor takes all the same options as the regular `Pwned::Password` contructor.
+The `Pwned::HashedPassword` constructor takes all the same options as the regular `Pwned::Password` constructor.
 
 ### Devise
 
@@ -395,7 +395,7 @@ The results may, or may not, surprise you.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repository, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
